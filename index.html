@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Barnaby Bishop</title>
+    <style>
+      body {
+        background-color: #000000;
+      }
+      .section {
+        color: #ffffff;
+      }
+      .panel {
+        transition-property: left top;
+        transition-duration: 3s;
+        transition-timing-function: ease;
+        margin-left: 100px;
+        margin-top: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="section">
+        <h2 class="home">Home</h2>
+        <div class="panel" style="position: absolute; top: 0vh; left: 0vw;">
+          This is home
+        </div>
+      </div>
+      <div class="section">
+        <h2 class="about">About</h2>
+        <div class="panel" style="position: absolute; top: 100vh; left: 100vw;">
+          This is about
+        </div>
+      </div>
+      <div class="section">
+        <h2 class="projects">Projects</h2>
+        <div class="panel" style="position: absolute; top: 100vh; left: 0vw;">
+          These are projects
+        </div>
+      </div>
+      <div class="section"><h2 class="github">GitHub</h2></div>
+      <div class="section"><h2 class="what">What</h2></div>
+    </div>
+    <script>
+      const shadow = 'box-shadow: 0px 0px 1px 1px rgba(255, 255, 255, 0.5);';
+      const rnd = max => Math.floor(Math.random() * max + 1);
+      const opacity = () => (rnd(3) === 3 ? Math.random() : 1);
+      const container = document.querySelector('.container');
+      const stars = new Array(700).fill().map(i => {
+        const star = document.createElement('div');
+        const size = rnd(3);
+        star.style = `
+                  background-color:#ffffff;
+                  position:absolute;
+                  border-radius: 1px;
+                  transition-property: left top;
+                  transition-duration: 3s;
+                  transition-timing-function: ease;
+                  left:${rnd(200)}vw;
+                  top:${rnd(200)}vh;
+                  width:${size}px;
+                  height:${size}px;
+                  opacity:${opacity()};
+                  `;
+        //${rnd(3) === 3 && shadow};
+        star.setAttribute('offset', rnd(3));
+        return container.appendChild(star);
+      });
+      const moveStars = (left, top) => {
+        stars.forEach(star => {
+          const offset = star.getAttribute('offset');
+          if (top) {
+            star.style.top = parseInt(star.style.top) - top / offset + 'vh';
+          }
+          if (left) {
+            star.style.left = parseInt(star.style.left) - left / offset + 'vw';
+          }
+        });
+      };
+      const starMap = {
+        pos: {
+          x: 0,
+          y: 0,
+        },
+        home: {
+          panel: document.querySelector('.home + .panel'),
+          x: 0,
+          y: 0,
+        },
+        about: {
+          panel: document.querySelector('.about + .panel'),
+          x: 100,
+          y: 100,
+        },
+        projects: {
+          panel: document.querySelector('.projects + .panel'),
+          x: 0,
+          y: 100,
+        },
+      };
+
+      const movePanels = (xOffset, yOffset) => {
+        Object.keys(starMap).forEach(key => {
+          if (starMap[key].panel) {
+            const panel = starMap[key].panel;
+            panel.style.left = `${parseInt(panel.style.left) - xOffset}vw`;
+            panel.style.top = `${parseInt(panel.style.top) - yOffset}vh`;
+          }
+        });
+      };
+
+      const move = system => {
+        const xOffset = system.x - starMap.pos.x;
+        const yOffset = system.y - starMap.pos.y;
+
+        console.log('Moving', xOffset, yOffset);
+
+        moveStars(xOffset, yOffset);
+        movePanels(xOffset, yOffset);
+
+        system.panel.style.left = '0vw';
+        system.panel.style.top = '0vh';
+
+        starMap.pos.x = system.x;
+        starMap.pos.y = system.y;
+      };
+
+      document
+        .querySelector('.home')
+        .addEventListener('click', () => move(starMap.home));
+      document
+        .querySelector('.about')
+        .addEventListener('click', () => move(starMap.about));
+      document
+        .querySelector('.projects')
+        .addEventListener('click', () => move(starMap.projects));
+    </script>
+  </body>
+</html>
