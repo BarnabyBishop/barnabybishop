@@ -1,3 +1,1 @@
 # Personal site for barnabybishop.com
-
-I'd call it a porfolio site if there was something to show off...
