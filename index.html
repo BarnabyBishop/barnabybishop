@@ -8,6 +8,11 @@
     <style>
       body {
         background-color: #000000;
+        font-family: 'IBM Plex Mono', monospace;
+      }
+      .container {
+        margin-top: 30px;
+        margin-left: 30px;
       }
       .section {
         color: #ffffff;
@@ -16,8 +21,54 @@
         transition-property: left top;
         transition-duration: 3s;
         transition-timing-function: ease;
-        margin-left: 100px;
-        margin-top: 100px;
+        margin-left: 200px;
+        margin-top: 35px;
+        z-index: 1;
+      }
+      .content {
+        border: solid 2px #00d200;
+        background-image: linear-gradient(
+            rgba(0, 210, 0, 0.15) 1px,
+            transparent 1px
+          ),
+          linear-gradient(90deg, rgba(0, 210, 0, 0.15) 1px, transparent 1px);
+        background-size: 20px 20px, 20px 20px;
+        background-color: rgba(58, 58, 58, 0.78);
+        width: 500px;
+        padding: 5px 20px;
+      }
+
+      .content::before {
+        content: ' ';
+        border-right: solid 2px #00d200;
+        height: 40px;
+        width: 40px;
+        position: absolute;
+        top: -19px;
+        left: -20px;
+        transform: rotate(45deg);
+        background-color: #000;
+      }
+
+      .content::after {
+        content: ' ';
+        border-left: solid 2px #00d200;
+        height: 40px;
+        width: 40px;
+        position: absolute;
+        bottom: -19px;
+        right: -20px;
+        transform: rotate(45deg);
+        background-color: #000;
+      }
+
+      .star {
+        background-color: #ffffff;
+        position: absolute;
+        border-radius: 1px;
+        transition-property: left top;
+        transition-duration: 3s;
+        transition-timing-function: ease;
       }
     </style>
   </head>
@@ -26,23 +77,69 @@
       <div class="section">
         <h2 class="home">Home</h2>
         <div class="panel" style="position: absolute; top: 0vh; left: 0vw;">
-          This is home
+          <div class="content">
+            <p>
+              Hi 👋
+            </p><p>I'm Barnaby. Software Engineer, sometimes Technical
+              Manager.
+            </p>
+            <p>Currently building things with Node.JS, React.JS, Typescript & AWS. 👨‍💻</p>
+            <p>
+              Current working at Nine with the awesome Publishing Technology
+              team ✨.
+            </p>
+          </div>
         </div>
       </div>
       <div class="section">
         <h2 class="about">About</h2>
-        <div class="panel" style="position: absolute; top: 100vh; left: 100vw;">
-          This is about
+        <div class="panel" style="position: absolute; top: 150vh; left: 150vw;">
+          <div class="content">
+            <p>This is a homage to the first website I remember building.</p>
+            <p>
+              It was back in the 90's, probably on Geocities and I was trying to
+              make a virtual space station where each section of the space
+              station took you to a different page on the site.
+            </p>
+            <p>
+              Google wasn't around and the only way I could learn Javascript was
+              from snippets on a CD-ROM from one of my Dad's PC mags.
+            </p>
+            <p>
+              I never quite managed to get the image map or Javascript working
+              well enough to make the site work.
+            </p>
+            <p>
+              In memory to those days I decided to build this site similarly to how I <em>tried</em> to build sites back then:
+            </p>
+            <p>
+              <ul>
+                <li>One file</li>
+                <li>No libraries</li>
+                <li>No build tools</li>
+              </ul>
+            </p>
+            <p>I let myself use Google this time though...</p>
+          </div>
         </div>
       </div>
       <div class="section">
         <h2 class="projects">Projects</h2>
-        <div class="panel" style="position: absolute; top: 100vh; left: 0vw;">
-          These are projects
+        <div class="panel" style="position: absolute; top: 150vh; left: 0vw;">
+          <div class="content">
+            <p>Some side projects I work on in the rare case I have free time:</p>
+            <p>
+              <ul>
+                <li>Noted - Yet another note taking/todo app.</li>
+                <li>S3 Uploader - A super simple (and basic) CLI for uploading a directory of files to S3.</li>
+                <li>barnabybishop - This site...the one you are on right now.</li>
+              </ul>
+            </p>
+          </div>
         </div>
       </div>
       <div class="section"><h2 class="github">GitHub</h2></div>
-      <div class="section"><h2 class="what">What</h2></div>
+      <div class="section"><h2 class="blog">Blog</h2></div>
     </div>
     <script>
       const shadow = 'box-shadow: 0px 0px 1px 1px rgba(255, 255, 255, 0.5);';
@@ -53,20 +150,14 @@
         const star = document.createElement('div');
         const size = rnd(3);
         star.style = `
-                  background-color:#ffffff;
-                  position:absolute;
-                  border-radius: 1px;
-                  transition-property: left top;
-                  transition-duration: 3s;
-                  transition-timing-function: ease;
                   left:${rnd(200)}vw;
                   top:${rnd(200)}vh;
                   width:${size}px;
                   height:${size}px;
                   opacity:${opacity()};
                   `;
-        //${rnd(3) === 3 && shadow};
         star.setAttribute('offset', rnd(3));
+        star.className = 'star';
         return container.appendChild(star);
       });
       const moveStars = (left, top) => {
@@ -92,13 +183,13 @@
         },
         about: {
           panel: document.querySelector('.about + .panel'),
-          x: 100,
-          y: 100,
+          x: 150,
+          y: 150,
         },
         projects: {
           panel: document.querySelector('.projects + .panel'),
           x: 0,
-          y: 100,
+          y: 150,
         },
       };
 
@@ -138,5 +229,9 @@
         .querySelector('.projects')
         .addEventListener('click', () => move(starMap.projects));
     </script>
+    <link
+      href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono"
+      rel="stylesheet"
+    />
   </body>
 </html>
