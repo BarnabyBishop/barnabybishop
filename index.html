@@ -12,6 +12,10 @@
         background-color: #000000;
         color: #fff;
       }
+      a {
+        color: #fff;
+        text-decoration: none;
+      }
       .container {
         margin-top: 30px;
         margin-left: 30px;
@@ -20,9 +24,16 @@
         padding: 0;
         list-style: none;
         font-size: 25px;
+        max-width: 140px;
       }
       .menu-item {
         margin-bottom: 15px;
+        cursor: pointer;
+        max-width: 162px;
+        display: inline-block;
+      }
+      .menu-item.active {
+        border-bottom: solid 2px #00d200;
       }
 
       .panel {
@@ -36,7 +47,7 @@
       .content {
         position: relative;
         width: 65vw;
-        max-width: 600px;
+        max-width: 610px;
         padding: 5px 20px;
         border: solid 2px #00d200;
         background-image: linear-gradient(
@@ -88,10 +99,7 @@
 
         .menu {
           text-align: center;
-        }
-
-        .menu-item {
-          display: inline-block;
+          max-width: 100%;
         }
 
         .panel {
@@ -108,11 +116,15 @@
   <body>
     <div class="container">
       <ul class="menu">
-        <li class="menu-item home">Home</li>
+        <li class="menu-item active home">Home</li>
         <li class="menu-item about">About</li>
         <li class="menu-item projects">Projects</li>
-        <li class="menu-item github">Github</li>
-        <li class="menu-item twitter">Twitter</li>
+        <li class="menu-item github">
+          <a href="https://github.com/BarnabyBishop/">Github</a>
+        </li>
+        <li class="menu-item twitter">
+          <a href="https://twitter.com/barneybishop">Twitter</a>
+        </li>
       </ul>
       <div class="panel home" style="position: absolute; top: 0vh; left: 0vw;">
         <div class="content">
@@ -132,20 +144,17 @@
           <p>This is a homage to the first website I remember building.</p>
           <p>
             It was back in the 90's, probably on Geocities and I was trying to
-            make a virtual space station where each section of the space station
-            took you to a different page on the site.
+            build a space themed site with a space station where clicking
+            different parts of the station took you to different parts of the
+            site.
           </p>
           <p>
-            Google wasn't around and the only way I could learn Javascript was
-            from snippets on a CD-ROM from one of my Dad's PC mags.
-          </p>
-          <p>
-            I never quite managed to get the image map or Javascript working
-            well enough to make the site work.
+            Without Google I never quite managed to get the image map or
+            Javascript working well enough to make the space station work.
           </p>
           <p>
             In memory to those days I decided to build this site similarly to
-            how I <em>tried</em> to build sites back then:
+            how I built sites back then:
           </p>
           <ul>
             <li>One file</li>
@@ -160,14 +169,18 @@
         style="position: absolute; top: 150vh; left: 0vw;"
       >
         <div class="content">
-          <p>Some side projects I work on in the rare case I have free time:</p>
+          <p>Some side projects:</p>
           <ul>
-            <li>Noted - Yet another note taking/todo app.</li>
             <li>
-              S3 Uploader - A super simple (and basic) CLI for uploading a
-              directory of files to S3.
+              <a href="https://github.com/BarnabyBishop/noted">Noted</a> - Yet
+              another note taking/todo app.
             </li>
-            <li>barnabybishop - This site...the one you are on right now.</li>
+            <li>
+              <a href="https://github.com/BarnabyBishop/barnabybishop"
+                >barnabybishop.com</a
+              >
+              - This site...the one you are on right now.
+            </li>
           </ul>
         </div>
       </div>
@@ -233,7 +246,7 @@
         });
       };
 
-      const move = system => {
+      const move = (system, key) => {
         const xOffset = system.x - starMap.pos.x;
         const yOffset = system.y - starMap.pos.y;
 
@@ -245,17 +258,25 @@
 
         starMap.pos.x = system.x;
         starMap.pos.y = system.y;
+
+        document
+          .querySelectorAll('.menu-item')
+          .forEach(
+            menuItem =>
+              (menuItem.className = menuItem.className.replace('active', ''))
+          );
+        document.querySelector(`.menu-item.${key}`).className += ' active';
       };
 
       document
         .querySelector('.menu-item.home')
-        .addEventListener('click', () => move(starMap.home));
+        .addEventListener('click', () => move(starMap.home, 'home'));
       document
         .querySelector('.menu-item.about')
-        .addEventListener('click', () => move(starMap.about));
+        .addEventListener('click', () => move(starMap.about, 'about'));
       document
         .querySelector('.menu-item.projects')
-        .addEventListener('click', () => move(starMap.projects));
+        .addEventListener('click', () => move(starMap.projects, 'projects'));
     </script>
     <link
       href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono"
