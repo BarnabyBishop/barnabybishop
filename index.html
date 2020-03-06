@@ -7,7 +7,13 @@
     <title>Barnaby Bishop</title>
     <link rel="shortcut icon" href="favicon.png" />
     <style>
+      html,
       body {
+        overflow: hidden;
+      }
+      body {
+        position: relative;
+        height: 100vh;
         font-family: 'IBM Plex Mono', monospace;
         background-color: #000000;
         color: #fff;
@@ -86,10 +92,46 @@
       .star {
         background-color: #ffffff;
         position: absolute;
-        border-radius: 1px;
+        border-radius: 50%;
         transition-property: left top;
         transition-duration: 3s;
         transition-timing-function: ease;
+      }
+
+      .blinker {
+        top: 80vh;
+        left: 50vw;
+        position: absolute;
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .blinker .star {
+        width: 4px;
+        height: 4px;
+        animation: rainbow 2s linear infinite;
+      }
+
+      @keyframes rainbow {
+        0% {
+          background-color: #fff;
+        }
+        20% {
+          background-color: #63f76e;
+        }
+        40% {
+          background-color: #ff6f6f;
+        }
+        60% {
+          background-color: #66d3ff;
+        }
+        80% {
+          background-color: #f560ff;
+        }
       }
 
       @media (max-width: 500px) {
@@ -108,8 +150,13 @@
         }
 
         .content {
-          width: 83vw;
+          width: 79vw;
         }
+      }
+
+      .hideui .menu,
+      .hideui .panel {
+        display: none;
       }
     </style>
   </head>
@@ -128,12 +175,11 @@
       </ul>
       <div class="panel home" style="position: absolute; top: 0vh; left: 0vw;">
         <div class="content">
-          <p>Hi 👋</p>
-          <p>I'm Barnaby. Software Engineer, sometimes Technical Manager.</p>
+          <p>Barnaby Bishop. Software Engineer & Engineering Manager.</p>
           <p>
             Currently building things with Node.js, React, Typescript & AWS. 👨‍💻
           </p>
-          <p>Working at Nine with the awesome Publishing Technology team ✨.</p>
+          <p>Working at Nine with the Publishing Technology team ✨.</p>
         </div>
       </div>
       <div
@@ -143,25 +189,19 @@
         <div class="content">
           <p>This is a homage to the first website I remember building.</p>
           <p>
-            It was back in the 90's, probably on Geocities and I was trying to
-            build a space themed site with a space station where clicking
-            different parts of the station took you to different parts of the
-            site.
+            It was back in the 90's, on Geocities and it was space themed. I
+            remember struggling a lot to get images to change on hover.
           </p>
           <p>
-            Without Google I never quite managed to get the image map or
-            Javascript working well enough to make the space station work.
-          </p>
-          <p>
-            In memory to those days I decided to build this site similarly to
-            how I built sites back then:
+            This site was built similarly to how I (attempted) to build websites
+            in those days:
           </p>
           <ul>
-            <li>One file</li>
-            <li>No libraries</li>
-            <li>No build tools</li>
+            <li>One file with all the HTML, CSS and Javascript.</li>
+            <li>No libraries.</li>
+            <li>No frameworks.</li>
+            <li>No build tools.</li>
           </ul>
-          <p>I let myself use Google this time though...</p>
         </div>
       </div>
       <div
@@ -184,25 +224,36 @@
           </ul>
         </div>
       </div>
+      <div class="blinker">
+        <div class="star"></div>
+      </div>
     </div>
     <script>
+      const STAR_COUNT = 700;
+      const SIZE_MAX = 3;
+      const VIEW_MAX = 200;
+
       const rnd = max => Math.floor(Math.random() * max + 1);
       const opacity = () => (rnd(3) === 3 ? Math.random() : 1);
+
       const container = document.querySelector('.container');
-      const stars = new Array(700).fill().map(i => {
+
+      const stars = new Array(STAR_COUNT).fill().map(i => {
         const star = document.createElement('div');
-        const size = rnd(3);
+        const size = rnd(SIZE_MAX);
         star.style = `
-                  left:${rnd(200)}vw;
-                  top:${rnd(200)}vh;
-                  width:${size}px;
-                  height:${size}px;
-                  opacity:${opacity()};
-                  `;
-        star.setAttribute('offset', rnd(3));
+          left:${rnd(VIEW_MAX)}vw;
+          top:${rnd(VIEW_MAX)}vh;
+          width:${size}px;
+          height:${size}px;
+          opacity:${opacity()};
+        `;
+
+        star.setAttribute('offset', rnd(SIZE_MAX));
         star.className = 'star';
         return container.appendChild(star);
       });
+
       const moveStars = (left, top) => {
         stars.forEach(star => {
           const offset = star.getAttribute('offset');
@@ -214,6 +265,7 @@
           }
         });
       };
+
       const starMap = {
         pos: {
           x: 0,
@@ -268,6 +320,22 @@
         document.querySelector(`.menu-item.${key}`).className += ' active';
       };
 
+      const toggleClass = (element, className) => {
+        let classes = element.getAttribute('class');
+        classes = classes.split(' ');
+        const index = classes.indexOf(className);
+        if (index > -1) {
+          classes.splice(index, 1);
+        } else {
+          classes.push(className);
+        }
+        element.className = classes.join(' ');
+      };
+
+      const goBlinker = () => {
+        toggleClass(document.querySelector('.container'), 'hideui');
+      };
+
       document
         .querySelector('.menu-item.home')
         .addEventListener('click', () => move(starMap.home, 'home'));
@@ -277,6 +345,10 @@
       document
         .querySelector('.menu-item.projects')
         .addEventListener('click', () => move(starMap.projects, 'projects'));
+
+      document
+        .querySelector('.blinker')
+        .addEventListener('click', () => goBlinker());
     </script>
     <link
       href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono"
