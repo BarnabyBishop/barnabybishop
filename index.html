@@ -11,6 +11,7 @@
       body {
         overflow: hidden;
       }
+      
       body {
         position: relative;
         height: 100vh;
@@ -18,26 +19,34 @@
         background-color: #000000;
         color: #fff;
       }
+
       a {
         color: #fff;
         text-decoration: none;
       }
+
       .container {
         margin-top: 30px;
         margin-left: 30px;
       }
+
       .menu {
         padding: 0;
         list-style: none;
         font-size: 25px;
         max-width: 140px;
+        transition-property: opacity;
+        transition-duration: 3s;
+        transition-timing-function: ease;
       }
+
       .menu-item {
         margin-bottom: 15px;
         cursor: pointer;
         max-width: 162px;
         display: inline-block;
       }
+
       .menu-item.active {
         border-bottom: solid 2px #00d200;
       }
@@ -45,11 +54,12 @@
       .panel {
         margin-left: 200px;
         margin-top: 35px;
-        transition-property: left top;
         z-index: 1;
+        transition-property: left top;
         transition-duration: 3s;
         transition-timing-function: ease;
       }
+
       .content {
         position: relative;
         width: 65vw;
@@ -156,7 +166,90 @@
 
       .hideui .menu,
       .hideui .panel {
-        display: none;
+        opacity: 0;
+      }
+
+      .purple-container {
+        position: absolute;
+        top: 30vh;
+        left: 40vw;
+        z-index: 1;
+        /* no opacity for fade in 
+           visibility hidden to make it unclickable when hidden
+        */
+        opacity: 0;
+        visibility: hidden;
+        transition-property: opacity visibility;
+        transition-duration: 3s;
+        transition-timing-function: ease;
+      }
+
+      .purple-container.show {
+        opacity: 100;
+        visibility: visible;
+      }
+
+      .planet-purple {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        height: 300px;
+        width: 300px;
+      
+        background-color: rebeccapurple;
+      }
+
+
+      .planet-purple.top {
+        height: 150px;
+        border-top-left-radius: 150px;
+        border-top-right-radius: 150px;
+        background-image: radial-gradient(circle at 100px, transparent 60%, #210d36 );
+        z-index: 3;
+      }
+
+      .planet-purple-rings {
+        position: absolute;
+        top: 60px;
+        left: -100px;
+        margin: auto;
+        height: 200px;
+        width: 500px;
+
+        border-radius: 50%;
+      
+        background-image: radial-gradient(ellipse, transparent 50%, #33e81d 80%);
+        transform: rotateX(65deg);
+
+        z-index: 2;
+      }
+
+      .planet-purple.bottom {
+        background-image: radial-gradient(circle at 100px, transparent 45%, black);
+        border-radius: 50%;
+        z-index: 1;
+      }
+
+      .moon {
+        position: absolute;
+        top: 140px;
+        left: 140px;
+        height: 20px;
+        width: 20px;
+        background-color: #999;
+        animation: orbit 9s linear infinite;
+        border-radius: 50%;
+        background-image: radial-gradient(circle at 5px, #999, #000);
+      }
+
+      @keyframes orbit {
+        from {
+          transform: rotate(0deg) translateX(300px) rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg) translateX(300px) rotate(-360deg);
+        }
       }
     </style>
   </head>
@@ -226,6 +319,12 @@
       </div>
       <div class="blinker">
         <div class="star"></div>
+      </div>
+      <div class="purple-container">
+        <div class="planet-purple top"></div>
+        <div class="planet-purple-rings"></div>
+        <div class="planet-purple bottom"></div>
+        <div class="moon"></div>
       </div>
     </div>
     <script>
@@ -334,6 +433,7 @@
 
       const goBlinker = () => {
         toggleClass(document.querySelector('.container'), 'hideui');
+        toggleClass(document.querySelector('.purple-container'), 'show');
       };
 
       document
@@ -349,6 +449,9 @@
       document
         .querySelector('.blinker')
         .addEventListener('click', () => goBlinker());
+      document
+          .querySelector('.purple-container')
+          .addEventListener('click', () => goBlinker());
     </script>
     <link
       href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono"
