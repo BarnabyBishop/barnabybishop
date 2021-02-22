@@ -86,8 +86,9 @@ export default function Home() {
               </p>
               <p>
                 It has been almost 20 years since I started working as a
-                software developer (yikes!) but recently I have been working
-                with NodeJS, ReactJS with deployment shenanigans in AWS.
+                software developer (yikes!) but I've spent the last few years
+                working with NodeJS &amp; ReactJS with deployment shenanigans in
+                AWS.
               </p>
               <p>
                 I've been managing engineering teams for five years, it has been
@@ -133,10 +134,7 @@ export default function Home() {
                   honest.
                 </li>
                 <li>
-                  <Link
-                    href="https://barnabybishop.com/2019"
-                    classes="text-gray-500"
-                  >
+                  <Link href="/2019/index.html" classes="text-gray-500">
                     2019
                   </Link>{' '}
                   - previous version of this site.
@@ -157,35 +155,45 @@ export default function Home() {
                     bananapark.com.au
                   </Link>{' '}
                   - Static rendered e-commerce site built before it was cool!
-                  (GatsbyJS)
+                  Using GatsbyJS
                 </li>
                 <li>
                   <Link
                     href="https://www.linkedin.com/in/barnaby-bishop-4a209299/"
                     classes="text-green-500"
                   >
-                    Linked in
+                    Noted
                   </Link>{' '}
-                  - for business 💼
+                  - A note taking/todo app I built and used day-to-day when I
+                  started working as an Engineering Manager.
                 </li>
                 <li>
                   <Link
                     href="https://twitter.com/barneybishop"
                     classes="text-indigo-500"
                   >
-                    Twitter
+                    barnabybishop.com
                   </Link>{' '}
-                  - I never post on twitter so no reason to follow me to be
-                  honest.
+                  - This website
+                </li>
+                <li>
+                  <Link
+                    href="https://twitter.com/barneybishop"
+                    classes="text-indigo-500"
+                  >
+                    barnabybishop.com
+                  </Link>{' '}
+                  - Previous iteration of this website
                 </li>
                 <li>
                   <Link
                     href="https://barnabybishop.com/2019"
                     classes="text-gray-500"
                   >
-                    2019
+                    Planet Codepen
                   </Link>{' '}
-                  - previous version of this site.
+                  - Some Codepen CSS planets inspired by the 2019 version of
+                  this website.
                 </li>
               </ul>
             </Content>
