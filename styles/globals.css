@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
+.shadow-heavy {
+  box-shadow: 12px 12px #374151;
+}
