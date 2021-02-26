@@ -6,3 +6,6 @@ yarn-error.log
 # Build directory
 .DS_Store
 .next
+
+# temporarily until we are ready to check in the build
+out
