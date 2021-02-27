@@ -7,5 +7,6 @@ yarn-error.log
 .DS_Store
 .next
 
-# temporarily until we are ready to check in the build
-out
+# Don't need no JS or JSON in the build
+out/_next/**/*.js
+out/_next/**/*.json
