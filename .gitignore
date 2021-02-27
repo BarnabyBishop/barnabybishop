@@ -4,5 +4,9 @@ node_modules
 yarn-error.log
 
 # Build directory
-/public
 .DS_Store
+.next
+
+# Don't need no JS or JSON in the build
+out/_next/**/*.js
+out/_next/**/*.json
