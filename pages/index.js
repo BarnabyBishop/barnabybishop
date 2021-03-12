@@ -8,10 +8,11 @@ const Content = ({ classes, children }) => (
   <div
     className={`
       h-auto
-      w-4/5
+      
       p-7
       rounded
-      ml-5
+      m-3
+      sm:mx-7
       -mt-4
       shadow-heavy
       space-y-3
@@ -49,29 +50,34 @@ export default function Home() {
 
       <main
         className="
-          max-w-screen-md
+          max-w-2xl
           mx-auto
           bg-white
-          p-8
+          p-4
+          sm:p-8
           m-8
           content-center
           space-y-4"
       >
-        <img
-          className="
+        <header className="flex ml-5 mr-7 justify-between">
+          <div className="space-y-4">
+            <h1 className="text-5xl font-bold">Barnaby Bishop</h1>
+            <blockquote>Welcome to my very short website.</blockquote>
+          </div>
+
+          <img
+            className="
+                profile-picture
                 border-solid
                 rounded-full 
                 border-4
-                border-black
-                float-right"
-          src="/profile.png"
-          alt="me"
-          width="128"
-          height="128"
-        />
-
-        <h1 className="text-5xl font-bold">Barnaby Bishop</h1>
-        <blockquote>Welcome to my very short website.</blockquote>
+                border-black"
+            src="/profile.jpg"
+            alt="me"
+            width="128"
+            height="128"
+          />
+        </header>
 
         <div className="space-y-12">
           <section>
@@ -92,8 +98,9 @@ export default function Home() {
                 AWS.
               </p>
               <p>
-                I've been managing engineering teams for five years, it has been
-                fun.
+                I've been managing engineering teams for five years and have
+                been lucky to work on a lot of amazing projects with amazing
+                people.
               </p>
               <p>
                 Once upon a time I worked in .Net but that was a long time ago
@@ -180,7 +187,7 @@ export default function Home() {
                 <li>
                   <Link
                     href="https://twitter.com/barneybishop"
-                    classes="text-indigo-500"
+                    classes="text-red-500"
                   >
                     barnabybishop.com
                   </Link>{' '}

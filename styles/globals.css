@@ -9,3 +9,8 @@ body {
 .shadow-heavy {
   box-shadow: 12px 12px #374151;
 }
+
+.profile-picture {
+  width: 128px;
+  height: 128px;
+}
