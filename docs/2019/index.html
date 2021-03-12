@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Barnaby Bishop</title>
+    <link rel="shortcut icon" href="favicon.png" />
+    <style>
+      html,
+      body {
+        overflow: hidden;
+      }
+      
+      body {
+        position: relative;
+        height: 100vh;
+        font-family: 'IBM Plex Mono', monospace;
+        background-color: #000000;
+        color: #fff;
+      }
+
+      a {
+        color: #fff;
+        text-decoration: none;
+      }
+
+      .container {
+        margin-top: 30px;
+        margin-left: 30px;
+      }
+
+      .menu {
+        padding: 0;
+        list-style: none;
+        font-size: 25px;
+        max-width: 140px;
+        transition-property: opacity;
+        transition-duration: 3s;
+        transition-timing-function: ease;
+      }
+
+      .menu-item {
+        margin-bottom: 15px;
+        cursor: pointer;
+        max-width: 162px;
+        display: inline-block;
+      }
+
+      .menu-item.active {
+        border-bottom: solid 2px #00d200;
+      }
+
+      .panel {
+        margin-left: 200px;
+        margin-top: 35px;
+        z-index: 1;
+        transition-property: left top;
+        transition-duration: 3s;
+        transition-timing-function: ease;
+      }
+
+      .content {
+        position: relative;
+        width: 65vw;
+        max-width: 610px;
+        padding: 5px 20px;
+        border: solid 2px #00d200;
+        background-image: linear-gradient(
+            rgba(0, 210, 0, 0.15) 1px,
+            transparent 1px
+          ),
+          linear-gradient(90deg, rgba(0, 210, 0, 0.15) 1px, transparent 1px);
+        background-size: 20px 20px, 20px 20px;
+        background-color: rgba(58, 58, 58, 0.78);
+      }
+
+      .content::before {
+        position: absolute;
+        top: -21px;
+        left: -22px;
+        height: 40px;
+        width: 40px;
+        content: ' ';
+        background-color: #000;
+        border-right: solid 2px #00d200;
+        transform: rotate(45deg);
+      }
+
+      .content::after {
+        position: absolute;
+        bottom: -21px;
+        right: -22px;
+        height: 40px;
+        width: 40px;
+        content: ' ';
+        border-left: solid 2px #00d200;
+        background-color: #000;
+        transform: rotate(45deg);
+      }
+
+      .star {
+        background-color: #ffffff;
+        position: absolute;
+        border-radius: 50%;
+        transition-property: left top;
+        transition-duration: 3s;
+        transition-timing-function: ease;
+      }
+
+      .blinker {
+        top: 80vh;
+        left: 50vw;
+        position: absolute;
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .blinker .star {
+        width: 4px;
+        height: 4px;
+        animation: rainbow 2s linear infinite;
+      }
+
+      @keyframes rainbow {
+        0% {
+          background-color: #fff;
+        }
+        20% {
+          background-color: #63f76e;
+        }
+        40% {
+          background-color: #ff6f6f;
+        }
+        60% {
+          background-color: #66d3ff;
+        }
+        80% {
+          background-color: #f560ff;
+        }
+      }
+
+      @media (max-width: 500px) {
+        .container {
+          margin-left: 0;
+        }
+
+        .menu {
+          text-align: center;
+          max-width: 100%;
+        }
+
+        .panel {
+          margin-left: 10px;
+          margin-top: 150px;
+        }
+
+        .content {
+          width: 79vw;
+        }
+      }
+
+      .hideui .menu,
+      .hideui .panel {
+        opacity: 0;
+      }
+
+      .purple-container {
+        position: absolute;
+        top: 30vh;
+        left: 40vw;
+        z-index: 1;
+        /* no opacity for fade in 
+           visibility hidden to make it unclickable when hidden
+        */
+        opacity: 0;
+        visibility: hidden;
+        transition-property: opacity visibility;
+        transition-duration: 3s;
+        transition-timing-function: ease;
+      }
+
+      .purple-container.show {
+        opacity: 100;
+        visibility: visible;
+      }
+
+      .planet-purple {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        height: 300px;
+        width: 300px;
+      
+        background-color: rebeccapurple;
+      }
+
+
+      .planet-purple.top {
+        height: 150px;
+        border-top-left-radius: 150px;
+        border-top-right-radius: 150px;
+        background-image: radial-gradient(circle at 100px, transparent 60%, #210d36 );
+        z-index: 3;
+      }
+
+      .planet-purple-rings {
+        position: absolute;
+        top: 60px;
+        left: -100px;
+        margin: auto;
+        height: 200px;
+        width: 500px;
+
+        border-radius: 50%;
+      
+        background-image: radial-gradient(ellipse, transparent 50%, #33e81d 80%);
+        transform: rotateX(65deg);
+
+        z-index: 2;
+      }
+
+      .planet-purple.bottom {
+        background-image: radial-gradient(circle at 100px, transparent 45%, black);
+        border-radius: 50%;
+        z-index: 1;
+      }
+
+      .moon {
+        position: absolute;
+        top: 140px;
+        left: 140px;
+        height: 20px;
+        width: 20px;
+        background-color: #999;
+        animation: orbit 9s linear infinite;
+        border-radius: 50%;
+        background-image: radial-gradient(circle at 5px, #999, #000);
+      }
+
+      @keyframes orbit {
+        from {
+          transform: rotate(0deg) translateX(300px) rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg) translateX(300px) rotate(-360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <ul class="menu">
+        <li class="menu-item active home">Home</li>
+        <li class="menu-item about">About</li>
+        <li class="menu-item projects">Projects</li>
+        <li class="menu-item github">
+          <a href="https://github.com/BarnabyBishop/">Github</a>
+        </li>
+        <li class="menu-item twitter">
+          <a href="https://twitter.com/barneybishop">Twitter</a>
+        </li>
+      </ul>
+      <div class="panel home" style="position: absolute; top: 0vh; left: 0vw;">
+        <div class="content">
+          <p>Barnaby Bishop. Software Engineer & Engineering Manager.</p>
+          <p>
+            Currently building things with Node.js, React, Typescript & AWS. 👨‍💻
+          </p>
+          <p>Working at Nine with the Publishing Technology team ✨.</p>
+        </div>
+      </div>
+      <div
+        class="panel about"
+        style="position: absolute; top: 150vh; left: 150vw;"
+      >
+        <div class="content">
+          <p>This is a homage to the first website I remember building.</p>
+          <p>
+            It was back in the 90's, on Geocities and it was space themed. I
+            remember struggling a lot to get images to change on hover.
+          </p>
+          <p>
+            This site was built similarly to how I (attempted) to build websites
+            in those days:
+          </p>
+          <ul>
+            <li>One file with all the HTML, CSS and Javascript.</li>
+            <li>No libraries.</li>
+            <li>No frameworks.</li>
+            <li>No build tools.</li>
+          </ul>
+        </div>
+      </div>
+      <div
+        class="panel projects"
+        style="position: absolute; top: 150vh; left: 0vw;"
+      >
+        <div class="content">
+          <p>Some side projects:</p>
+          <ul>
+            <li>
+              <a href="https://github.com/BarnabyBishop/noted">Noted</a> - Yet
+              another note taking/todo app.
+            </li>
+            <li>
+              <a href="https://github.com/BarnabyBishop/barnabybishop"
+                >barnabybishop.com</a
+              >
+              - This site...the one you are on right now.
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="blinker">
+        <div class="star"></div>
+      </div>
+      <div class="purple-container">
+        <div class="planet-purple top"></div>
+        <div class="planet-purple-rings"></div>
+        <div class="planet-purple bottom"></div>
+        <div class="moon"></div>
+      </div>
+    </div>
+    <script>
+      const STAR_COUNT = 700;
+      const SIZE_MAX = 3;
+      const VIEW_MAX = 200;
+
+      const rnd = max => Math.floor(Math.random() * max + 1);
+      const opacity = () => (rnd(3) === 3 ? Math.random() : 1);
+
+      const container = document.querySelector('.container');
+
+      const stars = new Array(STAR_COUNT).fill().map(i => {
+        const star = document.createElement('div');
+        const size = rnd(SIZE_MAX);
+        star.style = `
+          left:${rnd(VIEW_MAX)}vw;
+          top:${rnd(VIEW_MAX)}vh;
+          width:${size}px;
+          height:${size}px;
+          opacity:${opacity()};
+        `;
+
+        star.setAttribute('offset', rnd(SIZE_MAX));
+        star.className = 'star';
+        return container.appendChild(star);
+      });
+
+      const moveStars = (left, top) => {
+        stars.forEach(star => {
+          const offset = star.getAttribute('offset');
+          if (top) {
+            star.style.top = parseInt(star.style.top) - top / offset + 'vh';
+          }
+          if (left) {
+            star.style.left = parseInt(star.style.left) - left / offset + 'vw';
+          }
+        });
+      };
+
+      const starMap = {
+        pos: {
+          x: 0,
+          y: 0,
+        },
+        home: {
+          panel: document.querySelector('.panel.home'),
+          x: 0,
+          y: 0,
+        },
+        about: {
+          panel: document.querySelector('.panel.about'),
+          x: 150,
+          y: 150,
+        },
+        projects: {
+          panel: document.querySelector('.panel.projects'),
+          x: 0,
+          y: 150,
+        },
+      };
+
+      const movePanels = (xOffset, yOffset) => {
+        Object.keys(starMap).forEach(key => {
+          if (starMap[key].panel) {
+            const panel = starMap[key].panel;
+            panel.style.left = `${parseInt(panel.style.left) - xOffset}vw`;
+            panel.style.top = `${parseInt(panel.style.top) - yOffset}vh`;
+          }
+        });
+      };
+
+      const move = (system, key) => {
+        const xOffset = system.x - starMap.pos.x;
+        const yOffset = system.y - starMap.pos.y;
+
+        moveStars(xOffset, yOffset);
+        movePanels(xOffset, yOffset);
+
+        system.panel.style.left = '0vw';
+        system.panel.style.top = '0vh';
+
+        starMap.pos.x = system.x;
+        starMap.pos.y = system.y;
+
+        document
+          .querySelectorAll('.menu-item')
+          .forEach(
+            menuItem =>
+              (menuItem.className = menuItem.className.replace('active', ''))
+          );
+        document.querySelector(`.menu-item.${key}`).className += ' active';
+      };
+
+      const toggleClass = (element, className) => {
+        let classes = element.getAttribute('class');
+        classes = classes.split(' ');
+        const index = classes.indexOf(className);
+        if (index > -1) {
+          classes.splice(index, 1);
+        } else {
+          classes.push(className);
+        }
+        element.className = classes.join(' ');
+      };
+
+      const goBlinker = () => {
+        toggleClass(document.querySelector('.container'), 'hideui');
+        toggleClass(document.querySelector('.purple-container'), 'show');
+      };
+
+      document
+        .querySelector('.menu-item.home')
+        .addEventListener('click', () => move(starMap.home, 'home'));
+      document
+        .querySelector('.menu-item.about')
+        .addEventListener('click', () => move(starMap.about, 'about'));
+      document
+        .querySelector('.menu-item.projects')
+        .addEventListener('click', () => move(starMap.projects, 'projects'));
+
+      document
+        .querySelector('.blinker')
+        .addEventListener('click', () => goBlinker());
+      document
+          .querySelector('.purple-container')
+          .addEventListener('click', () => goBlinker());
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono"
+      rel="stylesheet"
+    />
+  </body>
+</html>

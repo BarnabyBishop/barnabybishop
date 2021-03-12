@@ -94,8 +94,7 @@ export default function Home() {
               <p>
                 It has been almost 20 years since I started working as a
                 software developer (yikes!) but I've spent the last few years
-                working with NodeJS &amp; ReactJS with deployment shenanigans in
-                AWS.
+                working with NodeJS, ReactJS and a fair bit of AWS.
               </p>
               <p>
                 I've been managing engineering teams for five years and have
@@ -103,8 +102,7 @@ export default function Home() {
                 people.
               </p>
               <p>
-                Once upon a time I worked in .Net but that was a long time ago
-                in a galaxy far, far away.
+                Once upon a time I worked in .Net but that was a long time ago.
               </p>
             </Content>
           </section>
@@ -115,8 +113,21 @@ export default function Home() {
               <ul className="space-y-2">
                 <li>
                   <Link
+                    href="https://www.linkedin.com/in/barnaby-bishop-4a209299/"
+                    classes="text-red-500"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    LinkedIn
+                  </Link>{' '}
+                  - for business 💼
+                </li>
+                <li>
+                  <Link
                     href="https://github.com/BarnabyBishop/"
                     classes="text-pink-500"
+                    target="_blank"
+                    rel="noopener"
                   >
                     Github
                   </Link>{' '}
@@ -124,17 +135,10 @@ export default function Home() {
                 </li>
                 <li>
                   <Link
-                    href="https://www.linkedin.com/in/barnaby-bishop-4a209299/"
-                    classes="text-green-500"
-                  >
-                    Linked in
-                  </Link>{' '}
-                  - for business 💼
-                </li>
-                <li>
-                  <Link
                     href="https://twitter.com/barneybishop"
                     classes="text-indigo-500"
+                    target="_blank"
+                    rel="noopener"
                   >
                     Twitter
                   </Link>{' '}
@@ -142,7 +146,12 @@ export default function Home() {
                   honest.
                 </li>
                 <li>
-                  <Link href="/2019/index.html" classes="text-gray-500">
+                  <Link
+                    href="/2019/index.html"
+                    classes="text-gray-500"
+                    target="_blank"
+                    rel="noopener"
+                  >
                     2019
                   </Link>{' '}
                   - previous version of this site.
@@ -157,51 +166,51 @@ export default function Home() {
               <ul className="space-y-2">
                 <li>
                   <Link
-                    href="https://github.com/BarnabyBishop/bananapark"
-                    classes="text-pink-500"
-                  >
-                    bananapark.com.au
-                  </Link>{' '}
-                  - Static rendered e-commerce site built before it was cool!
-                  Using GatsbyJS
-                </li>
-                <li>
-                  <Link
-                    href="https://www.linkedin.com/in/barnaby-bishop-4a209299/"
+                    href="https://github.com/BarnabyBishop/noted"
                     classes="text-green-500"
+                    target="_blank"
+                    rel="noopener"
                   >
                     Noted
                   </Link>{' '}
                   - A note taking/todo app I built and used day-to-day when I
-                  started working as an Engineering Manager.
+                  started working as an Engineering Manager. Build with NodeJS,
+                  React, Postgres and half implemented with GraphQL.
                 </li>
                 <li>
                   <Link
-                    href="https://twitter.com/barneybishop"
-                    classes="text-indigo-500"
-                  >
-                    barnabybishop.com
-                  </Link>{' '}
-                  - This website
-                </li>
-                <li>
-                  <Link
-                    href="https://twitter.com/barneybishop"
+                    href="https://github.com/BarnabyBishop/barnabybishop"
                     classes="text-red-500"
+                    target="_blank"
+                    rel="noopener"
                   >
                     barnabybishop.com
                   </Link>{' '}
-                  - Previous iteration of this website
+                  - This website. NextJS &amp; TailwindCSS.
                 </li>
                 <li>
                   <Link
-                    href="https://barnabybishop.com/2019"
-                    classes="text-gray-500"
+                    href="https://github.com/BarnabyBishop/barnabybishop/tree/2019"
+                    classes="text-indigo-500"
+                    target="_blank"
+                    rel="noopener"
                   >
-                    Planet Codepen
+                    barnabybishop.com (2019)
                   </Link>{' '}
-                  - Some Codepen CSS planets inspired by the 2019 version of
-                  this website.
+                  - Previous iteration of this website. No libraries, just plain
+                  HTML, CSS &amp; Javascript.
+                </li>
+                <li>
+                  <Link
+                    href="https://codepen.io/collection/DQEqjk"
+                    classes="text-gray-500"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    Space Codepen Collection
+                  </Link>{' '}
+                  - Some Codepens for prototyping ideas for the 2019 version of
+                  this site.
                 </li>
               </ul>
             </Content>
@@ -216,11 +225,16 @@ export default function Home() {
             >
               <p>
                 <span>Built with </span>
-                <Link href="https://nextjs.org/" classes="text-green-500">
+                <Link
+                  href="https://nextjs.org/"
+                  classes="text-green-500"
+                  target="_blank"
+                  rel="noopener"
+                >
                   NextJS
                 </Link>
                 <span> and </span>
-                <Link href="https://nextjs.org/" classes="text-purple-500">
+                <Link href="https://tailwindcss.com/" classes="text-purple-500">
                   Tailwind CSS
                 </Link>
                 .
