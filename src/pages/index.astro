@@ -1,15 +1,43 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Barnaby Bishop</title>
-    <link rel="canonical" href={Astro.site} />
-  </head>
-  <body>
-    <main>
-      <h1>Barnaby Bishop</h1>
-      <p>Website under construction.</p>
-    </main>
-  </body>
-</html>
+---
+import SiteShell from '../layouts/SiteShell.astro';
+import { posts } from '../lib/posts';
+---
+<SiteShell title="Barnaby Bishop" description="The personal website of Barnaby Bishop.">
+  <a class="skip-link" href="#content">Skip to content</a>
+  <header class="site-header"><span class="wordmark">Barnaby Bishop</span><nav aria-label="Main"><a href="/about">About</a></nav></header>
+  <main id="content">
+    <section class="hero" aria-labelledby="name">
+      <div class="shape circle" aria-hidden="true"></div><div class="shape square" aria-hidden="true"></div>
+      <svg class="squiggle" viewBox="0 0 200 70" aria-hidden="true"><path d="M5 50 Q25 5 45 40 T85 40 T125 40 T165 40 T195 25" fill="none" stroke="currentColor" stroke-width="7" /></svg>
+      <p class="eyebrow">A personal corner of the internet</p>
+      <h1 id="name">Barnaby<br />Bishop<span aria-hidden="true">.</span></h1>
+    </section>
+    <section class="posts" aria-labelledby="posts">
+      <h2 id="posts">Posts <span aria-hidden="true">↘</span></h2>
+      {posts.length ? <ol>{posts.map((post) => <li>
+        <time datetime={post.published}>{post.published}</time>
+        <h3><a href={`/${post.slug}`}>{post.title}</a></h3><p>{post.description}</p>
+      </li>)}</ol> : <p class="empty">Nothing published just yet. There’s room for something good.</p>}
+    </section>
+  </main>
+  <footer class="site-footer"><span>Barnaby Bishop</span><a href="/rss.xml">RSS</a></footer>
+</SiteShell>
+<style>
+  main { max-width: 76rem; margin: auto; padding-inline: clamp(1.25rem, 5vw, 4rem); }
+  .hero { position: relative; isolation: isolate; padding-block: 5rem 6rem; }
+  h1 { font-size: clamp(5rem, 15vw, 11rem); line-height: .9; margin: 2rem 0; letter-spacing: -.075em; }
+  h1 span { color: var(--accent); }
+  .shape, .squiggle { position: absolute; z-index: -1; }
+  .shape { border: 3px solid; box-shadow: 7px 7px 0 var(--ink); }
+  .circle { width: clamp(5rem, 18vw, 14rem); aspect-ratio: 1; border-radius: 50%; right: 5%; top: 12%; background: var(--pink); }
+  .square { width: clamp(4rem, 10vw, 8rem); aspect-ratio: 1; right: 23%; bottom: 12%; background: var(--mint); transform: rotate(16deg); }
+  .squiggle { width: 22%; right: 0; bottom: 0; }
+  .posts { padding-block: 2rem; }
+  h2 { font-size: 2.5rem; border-bottom: 3px solid; padding-bottom: 1rem; }
+  h2 span { float: right; }
+  ol { list-style: none; padding: 0; }
+  li { border-bottom: 2px solid; padding: 1.5rem 0; }
+  h3 { font-size: 1.8rem; margin-block: .5rem; }
+  time { font-size: .85rem; }
+  .empty { background: var(--lilac); border: 2px solid; box-shadow: 5px 5px 0; padding: 2rem; max-width: 38rem; }
+</style>
