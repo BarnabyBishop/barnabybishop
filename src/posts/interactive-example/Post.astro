@@ -1,0 +1,42 @@
+---
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import metadata from './metadata';
+---
+<ArticleLayout metadata={metadata}>
+  <p>This is an unpublished authoring example. Each post owns its layout: this one
+    chooses <code>ArticleLayout</code> for a shared header, footer and reading column.</p>
+  <h2>A little room to experiment</h2>
+  <p>Post styles stay scoped to this component. Post assets can live alongside it.
+    A bespoke article can import <code>SiteShell</code> instead and provide its own
+    visible page, including the header and footer.</p>
+  <div class="experiment" data-example>
+    <p>Small experiments make space for new ideas.</p>
+    <button type="button" hidden>Show another thought</button>
+    <p data-thought aria-live="polite" aria-atomic="true">Start with something small enough to try.</p>
+  </div>
+  <p>The thought above is readable without JavaScript. When the button is available,
+    activate it with a pointer, Enter or Space to cycle through a few more.</p>
+</ArticleLayout>
+<style>
+  .experiment { margin-block: 2rem; padding: 1.5rem; border: 2px solid var(--ink); background: var(--mint); box-shadow: 5px 5px 0 var(--ink); }
+  button { font: inherit; background: var(--paper); color: var(--ink); border: 2px solid; padding: .65rem 1rem; cursor: pointer; }
+  [data-thought] { min-height: 3.5em; }
+</style>
+<script>
+  const thoughts = [
+    'Start with something small enough to try.',
+    'Make the result easy to understand.',
+    'Leave room to change your mind.',
+  ];
+  document.querySelectorAll<HTMLElement>('[data-example]').forEach((example) => {
+    const button = example.querySelector('button');
+    const output = example.querySelector('[data-thought]');
+    if (!button || !output) return;
+    let index = 0;
+    button.hidden = false;
+    button.addEventListener('click', () => {
+      index = (index + 1) % thoughts.length;
+      output.textContent = thoughts[index]!;
+    });
+  });
+</script>
