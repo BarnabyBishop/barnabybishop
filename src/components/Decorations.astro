@@ -1,0 +1,30 @@
+<div class="decorations" aria-hidden="true">
+  <svg class="decoration loop" viewBox="0 0 160 160" focusable="false"><circle cx="80" cy="80" r="62" /></svg>
+  <svg class="decoration triangle" viewBox="0 0 150 150" focusable="false"><path d="M75 14 140 132H10Z" /></svg>
+  <svg class="decoration wave" viewBox="0 0 210 80" focusable="false"><path d="M8 48Q24 0 42 40T78 40T114 40T150 40T186 40" /></svg>
+  <svg class="decoration zigzag" viewBox="0 0 100 160" focusable="false"><path d="m20 12 54 28-54 28 54 28-54 28 54 28" /></svg>
+  <span class="decoration lozenge"></span>
+  <span class="decoration dot"></span>
+  <span class="decoration dash"></span>
+</div>
+<style>
+  .decorations { position: relative; min-width: 0; height: 100%; }
+  .decoration { position: absolute; overflow: visible; }
+  svg { stroke: var(--color-ink); stroke-width: var(--decoration-stroke); stroke-linejoin: round; }
+  .loop { width: 44%; top: 7%; right: 12%; fill: var(--color-pink); filter: drop-shadow(var(--decoration-shadow)); }
+  .triangle { width: 38%; bottom: 10%; left: 5%; fill: var(--color-yellow); transform: rotate(-14deg); filter: drop-shadow(var(--decoration-shadow)); }
+  .wave { width: 65%; top: 48%; right: 0; fill: none; stroke-width: 7; transform: rotate(-16deg); }
+  .zigzag { width: 19%; top: 5%; left: 3%; fill: none; stroke-width: 7; transform: rotate(9deg); }
+  .lozenge { width: 22%; height: 11%; right: 0; bottom: 6%; border: var(--border-strong); background: var(--color-mint); transform: rotate(-28deg); box-shadow: var(--shadow-hard); }
+  .dot { width: 9%; aspect-ratio: 1; border: var(--border-strong); border-radius: var(--radius-round); background: var(--color-lavender); top: 37%; left: 19%; }
+  .dash { width: 15%; height: var(--border-width); background: var(--color-ink); bottom: 8%; left: 54%; transform: rotate(40deg); }
+  @media (max-width: 42rem) {
+    .loop { width: 32%; right: 12%; top: 3%; }
+    .triangle { width: 29%; left: 5%; bottom: 7%; }
+    .wave { width: 45%; right: 0; top: 56%; }
+    .zigzag { width: 14%; left: 3%; top: 0; }
+    .dot { width: 7%; top: 18%; left: 35%; }
+    .lozenge { width: 17%; right: 0; bottom: 2%; height: 10%; }
+    .dash { width: 10%; left: 45%; bottom: 12%; }
+  }
+</style>

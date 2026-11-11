@@ -1,0 +1,9 @@
+---
+interface Props { current?: 'home' | 'about' }
+const { current } = Astro.props;
+---
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header">
+  <a class="wordmark" href="/" aria-current={current === 'home' ? 'page' : undefined}>Barnaby Bishop<span aria-hidden="true">✳</span></a>
+  <nav aria-label="Main"><a class="tactile" href="/about" aria-current={current === 'about' ? 'page' : undefined}>About <span aria-hidden="true">↗</span></a></nav>
+</header>
