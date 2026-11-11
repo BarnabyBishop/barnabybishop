@@ -1,5 +1,7 @@
 ---
 import SiteShell from './SiteShell.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
 import type { PostMetadata } from '../lib/post-catalogue';
 interface Props { metadata: PostMetadata }
 const { metadata } = Astro.props;
@@ -7,8 +9,7 @@ const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone: 'UT
 ---
 <SiteShell title={metadata.title + ' — Barnaby Bishop'} description={metadata.description}
   published={metadata.published} modified={metadata.modified} noindex={metadata.draft}>
-  <a class="skip-link" href="#content">Skip to content</a>
-  <header class="site-header"><a href="/" class="wordmark">Barnaby Bishop</a><nav aria-label="Main"><a href="/about">About</a></nav></header>
+  <SiteHeader />
   <main id="content" class="reading">
     <article>
       <header class="article-heading">
@@ -22,5 +23,5 @@ const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone: 'UT
       <div class="prose"><slot /></div>
     </article>
   </main>
-  <footer class="site-footer"><a href="/">Back to home</a><span>Barnaby Bishop</span></footer>
+  <SiteFooter />
 </SiteShell>

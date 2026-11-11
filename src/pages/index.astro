@@ -1,43 +1,73 @@
 ---
 import SiteShell from '../layouts/SiteShell.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import Decorations from '../components/Decorations.astro';
 import { posts } from '../lib/posts';
 ---
 <SiteShell title="Barnaby Bishop" description="The personal website of Barnaby Bishop.">
-  <a class="skip-link" href="#content">Skip to content</a>
-  <header class="site-header"><span class="wordmark">Barnaby Bishop</span><nav aria-label="Main"><a href="/about">About</a></nav></header>
+  <SiteHeader current="home" />
   <main id="content">
     <section class="hero" aria-labelledby="name">
-      <div class="shape circle" aria-hidden="true"></div><div class="shape square" aria-hidden="true"></div>
-      <svg class="squiggle" viewBox="0 0 200 70" aria-hidden="true"><path d="M5 50 Q25 5 45 40 T85 40 T125 40 T165 40 T195 25" fill="none" stroke="currentColor" stroke-width="7" /></svg>
       <p class="eyebrow">A personal corner of the internet</p>
-      <h1 id="name">Barnaby<br />Bishop<span aria-hidden="true">.</span></h1>
+      <h1 id="name"><span>Barnaby</span><span>Bishop<span class="full-stop" aria-hidden="true">.</span></span></h1>
+      <div class="hero-art"><Decorations /></div>
+      <div class="hello"><p>A little space for thoughts,<br />ideas &amp; things in progress.</p><a class="tactile" href="/about">Hello, I’m Barnaby <span aria-hidden="true">↗</span></a></div>
+      <svg class="hero-squiggle" viewBox="0 0 220 48" aria-hidden="true" focusable="false"><path d="m5 26 25-16 25 24 25-24 25 24 25-24 25 24 25-24 25 16" /></svg>
     </section>
     <section class="posts" aria-labelledby="posts">
-      <h2 id="posts">Posts <span aria-hidden="true">↘</span></h2>
+      <header class="posts-heading"><h2 id="posts">Posts<span aria-hidden="true">↘</span></h2><p>Words, when they’re ready.</p></header>
       {posts.length ? <ol>{posts.map((post) => <li>
-        <time datetime={post.published}>{post.published}</time>
-        <h3><a href={`/${post.slug}`}>{post.title}</a></h3><p>{post.description}</p>
-      </li>)}</ol> : <p class="empty">Nothing published just yet. There’s room for something good.</p>}
+        <time datetime={post.published}>{new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(post.published))}</time>
+        <h3><a href={`/${post.slug}`}>{post.title}<span aria-hidden="true"> ↗</span></a></h3><p>{post.description}</p>
+      </li>)}</ol> : <div class="empty"><span class="empty-star" aria-hidden="true">✳</span><div><h3>Something good takes a little space.</h3><p>Nothing published just yet. There’s room for something good.</p></div></div>}
     </section>
   </main>
-  <footer class="site-footer"><span>Barnaby Bishop</span><a href="/rss.xml">RSS</a></footer>
+  <SiteFooter />
 </SiteShell>
 <style>
-  main { max-width: 76rem; margin: auto; padding-inline: clamp(1.25rem, 5vw, 4rem); }
-  .hero { position: relative; isolation: isolate; padding-block: 5rem 6rem; }
-  h1 { font-size: clamp(5rem, 15vw, 11rem); line-height: .9; margin: 2rem 0; letter-spacing: -.075em; }
-  h1 span { color: var(--accent); }
-  .shape, .squiggle { position: absolute; z-index: -1; }
-  .shape { border: 3px solid; box-shadow: 7px 7px 0 var(--ink); }
-  .circle { width: clamp(5rem, 18vw, 14rem); aspect-ratio: 1; border-radius: 50%; right: 5%; top: 12%; background: var(--pink); }
-  .square { width: clamp(4rem, 10vw, 8rem); aspect-ratio: 1; right: 23%; bottom: 12%; background: var(--mint); transform: rotate(16deg); }
-  .squiggle { width: 22%; right: 0; bottom: 0; }
-  .posts { padding-block: 2rem; }
-  h2 { font-size: 2.5rem; border-bottom: 3px solid; padding-bottom: 1rem; }
-  h2 span { float: right; }
-  ol { list-style: none; padding: 0; }
-  li { border-bottom: 2px solid; padding: 1.5rem 0; }
-  h3 { font-size: 1.8rem; margin-block: .5rem; }
-  time { font-size: .85rem; }
-  .empty { background: var(--lilac); border: 2px solid; box-shadow: 5px 5px 0; padding: 2rem; max-width: 38rem; }
+  main { width: min(100%, var(--width-site)); margin-inline: auto; padding-inline: var(--gutter); }
+  .hero { display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr); column-gap: var(--space-3); padding-block: var(--space-4) var(--space-5); position: relative; container-type: inline-size; }
+  .eyebrow { grid-column: 1 / -1; margin-block: 0 var(--space-4); }
+  h1 { font-size: clamp(4rem, 11.7vw, 9.5rem); font-size: clamp(4rem, 13.2cqi, 9.5rem); font-weight: 950; line-height: .95; letter-spacing: -.075em; margin: 0; align-self: center; }
+  h1 > span { display: block; }
+  h1 > span:first-child { text-shadow: 3px 3px 0 var(--color-pink); }
+  h1 > span:last-child { margin-left: .07em; color: var(--color-lavender); -webkit-text-stroke: 2px var(--color-ink); paint-order: stroke fill; text-shadow: 4px 4px 0 var(--color-ink); }
+  .full-stop { color: var(--color-pink); }
+  .hero-art { grid-column: 2; grid-row: 2 / 4; min-height: 24rem; margin-top: -2rem; }
+  .hello { padding-top: var(--space-3); }
+  .hello p { margin-block: 0 var(--space-3); }
+  .hello .tactile { background: var(--color-pink); transform: rotate(-2deg); }
+  .hello .tactile:hover { transform: rotate(-2deg) translate(-2px, -2px); }
+  .hero-squiggle { position: absolute; width: 9rem; right: 43%; bottom: 1rem; stroke: var(--color-ink); stroke-width: 4; fill: none; }
+  .posts { padding-top: var(--space-3); }
+  .posts-heading { border-bottom: var(--border-strong); padding-bottom: var(--space-2); display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: var(--space-2); }
+  h2 { margin: 0; font-size: var(--text-section); letter-spacing: -.04em; }
+  h2 span { display: inline-block; margin-left: var(--space-3); }
+  .posts-heading p { font-size: var(--text-small); margin: 0; }
+  ol { list-style: none; padding: 0; margin-block: var(--space-3) 0; display: grid; gap: var(--space-3); }
+  li { border: var(--border-strong); border-radius: var(--radius-card); padding: var(--space-3); background: var(--color-surface); box-shadow: var(--shadow-hard); min-width: 0; }
+  li:nth-child(3n + 1) { background: var(--color-mint); }
+  li:nth-child(3n + 2) { background: var(--color-lavender); }
+  li h3 { font-size: clamp(1.5rem, 3vw, 2rem); margin-block: var(--space-1) var(--space-2); overflow-wrap: anywhere; }
+  li a { color: var(--color-ink); }
+  li p { margin: 0; }
+  time { font-size: var(--text-small); }
+  .empty { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); margin-top: var(--space-3); border: var(--border-strong); border-radius: var(--radius-card); box-shadow: var(--shadow-hard); background: var(--color-lavender); }
+  .empty-star { flex: none; font-size: 4rem; line-height: 1; }
+  .empty h3 { margin: 0 0 var(--space-1); font-size: clamp(1.2rem, 2vw, 1.5rem); }
+  .empty p { margin: 0; font-size: 1rem; }
+  @media (min-width: 55rem) { ol { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 42rem) {
+    .hero { grid-template-columns: minmax(0, 1fr); padding-top: var(--space-3); }
+    .eyebrow { font-size: .7rem; letter-spacing: .08em; margin-bottom: var(--space-3); }
+    h1 { font-size: clamp(2rem, 19cqi, 7rem); }
+    .hero-art { grid-column: 1; grid-row: 3; height: 11rem; min-height: 0; margin: var(--space-3) 0 0; width: min(100%, 24rem); justify-self: center; }
+    .hello { padding-top: var(--space-2); }
+    .hero-squiggle { width: 5rem; right: 0; bottom: 1rem; }
+    .empty { align-items: start; }
+    .empty-star { font-size: 2rem; }
+  }
+  @container (min-width: 55rem) { .hello p { font-size: 1.25rem; } }
+  @media (forced-colors: active) { h1 > span:last-child { -webkit-text-stroke: 0; text-shadow: none; color: CanvasText; } }
 </style>
