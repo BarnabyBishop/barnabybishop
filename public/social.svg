@@ -1,1 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630"><rect width="1200" height="630" fill="#fffaf0"/><circle cx="1000" cy="160" r="105" fill="#f5b9d2" stroke="#242229" stroke-width="5"/><path d="M940 430h120v120H940z" fill="#c6e8d5" stroke="#242229" stroke-width="5"/><text x="80" y="280" font-family="sans-serif" font-size="130" font-weight="800" fill="#242229">Barnaby</text><text x="80" y="420" font-family="sans-serif" font-size="130" font-weight="800" fill="#242229">Bishop.</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#fffaf0"/>
+  <g fill="#242229" stroke="#242229" stroke-width="5" stroke-linejoin="round">
+    <circle cx="1014" cy="170" r="105"/>
+    <path d="m918 385 145 25-25 145-145-25z"/>
+    <path d="m735 70 95 80-120 45z"/>
+  </g>
+  <g stroke="#242229" stroke-width="5" stroke-linejoin="round">
+    <circle cx="1000" cy="156" r="105" fill="#f5b9d2"/>
+    <path d="m904 371 145 25-25 145-145-25z" fill="#c6e8d5"/>
+    <path d="m721 56 95 80-120 45z" fill="#d4c5f1"/>
+    <path d="m720 310 28-24 28 24 28-24 28 24 28-24" fill="none" stroke-width="8"/>
+    <path d="m110 530 30-24 30 24 30-24 30 24 30-24" fill="none" stroke-width="8"/>
+    <circle cx="760" cy="525" r="24" fill="#f6df90"/>
+  </g>
+  <g font-family="sans-serif" font-size="130" font-weight="800" fill="#242229">
+    <text x="80" y="280">Barnaby</text>
+    <text x="85" y="427">Bishop.</text>
+    <text x="80" y="420" fill="#d4c5f1" stroke="#242229" stroke-width="3" paint-order="stroke fill">Bishop.</text>
+  </g>
+</svg>

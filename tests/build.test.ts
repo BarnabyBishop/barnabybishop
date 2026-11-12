@@ -58,7 +58,7 @@ test('real static builds, direct requests and deliberate local draft preview', {
     await build();
     const emptyHome = await readFile(join(directory, 'dist/index.html'), 'utf8');
     assert.match(emptyHome, /Nothing published just yet/);
-    assert.doesNotMatch(emptyHome, /interactive-example|<script\b/);
+    assert.doesNotMatch(emptyHome, /interactive-example|<script(?![^>]*type="application\/ld\+json")\b/);
     await assert.rejects(access(join(directory, 'dist/interactive-example/index.html')));
 
     // Temporary published fixtures verify both author-owned layout choices.
@@ -69,6 +69,7 @@ test('real static builds, direct requests and deliberate local draft preview', {
       await mkdir(folder);
       await writeFile(join(folder, 'metadata.ts'), 'export default ' + JSON.stringify({
         title: slug, description: 'Summary & details', slug, published, draft: false,
+        ...(bespoke ? { modified: '2026-02-01', image: { url: 'https://barnabybishop.com/override.png', alt: 'Fixture image', width: 800, height: 400 } } : {}),
       }));
       await writeFile(join(folder, 'Post.astro'), bespoke
         ? '---\nimport SiteShell from "../../layouts/SiteShell.astro";\n---\n<SiteShell title="Bespoke fixture" description="Own layout"><main><h1>My own page</h1></main></SiteShell>'
@@ -81,17 +82,79 @@ test('real static builds, direct requests and deliberate local draft preview', {
       published: '2024-01-01', draft: false,
     }));
     await cp(join(directory, 'src/posts/interactive-example/Post.astro'), join(interactive, 'Post.astro'));
+    await cp(join(directory, 'public/social.png'), join(directory, 'public/override.png'));
     await build();
     const interactiveHtml = await readFile(join(directory, 'dist/interactive-fixture/index.html'), 'utf8');
-    assert.match(interactiveHtml, /<script\b/);
+    assert.match(interactiveHtml, /<script(?![^>]*type="application\/ld\+json")\b/);
     const home = await readFile(join(directory, 'dist/index.html'), 'utf8');
     assert.ok(home.indexOf('href="/newer-fixture"') < home.indexOf('href="/older-fixture"'));
     for (const file of ['index.html', 'about/index.html', '404.html', 'rss.xml', 'sitemap.xml', 'llms.txt']) {
       const output = await readFile(join(directory, 'dist', file), 'utf8');
       assert.doesNotMatch(output, /interactive-example|A small interactive example/);
-      assert.doesNotMatch(output, /<script\b/);
+      assert.doesNotMatch(output, /<script(?![^>]*type="application\/ld\+json")\b/);
+    }
+    const titles = new Set<string>();
+    for (const [file, path, article] of [
+      ['index.html', '/', false], ['about/index.html', '/about', false],
+      ['older-fixture/index.html', '/older-fixture', true], ['newer-fixture/index.html', '/newer-fixture', true],
+    ] as const) {
+      const html = await readFile(join(directory, 'dist', file), 'utf8');
+      const url = 'https://barnabybishop.com' + path;
+      assert.match(html, new RegExp(`<link rel="canonical" href="${url}"`));
+      assert.match(html, new RegExp(`<meta property="og:url" content="${url}"`));
+      assert.match(html, new RegExp(`<meta property="og:type" content="${article ? 'article' : 'website'}"`));
+      assert.match(html, /<html lang="en"/);
+      assert.match(html, /name="viewport"/);
+      assert.match(html, /name="theme-color" content="#fffaf0"/);
+      assert.match(html, /property="og:site_name" content="Barnaby Bishop"/);
+      assert.match(html, /name="twitter:card" content="summary_large_image"/);
+      assert.match(html, /type="application\/rss\+xml"[^>]*href="https:\/\/barnabybishop.com\/rss.xml"/);
+      assert.doesNotMatch(html, /localhost|127\.0\.0\.1/);
+      const title = html.match(/<title>(.*?)<\/title>/)![1]!;
+      assert.ok(!titles.has(title));
+      titles.add(title);
+      const graph = JSON.parse(html.match(/<script type="application\/ld\+json">(.*?)<\/script>/s)![1]!)['@graph'];
+      assert.equal(graph[0].name, 'Barnaby Bishop');
+      assert.equal(graph[1].url, 'https://barnabybishop.com/');
+      assert.equal(graph.some((entry: { '@type': string }) => entry['@type'] === 'BlogPosting'), article);
+      if (article) {
+        assert.match(html, /property="article:author" content="https:\/\/barnabybishop.com\/"/);
+        assert.equal(graph[2].url, url);
+        assert.equal(graph[2].headline, path.slice(1));
+      }
+      if (path === '/newer-fixture') {
+        assert.match(html, /property="og:image" content="https:\/\/barnabybishop.com\/override.png"/);
+        assert.match(html, /property="og:image:alt" content="Fixture image"/);
+        assert.match(html, /property="og:image:width" content="800"/);
+        assert.match(html, /property="og:image:height" content="400"/);
+        assert.match(html, /property="article:modified_time" content="2026-02-01"/);
+        assert.equal(graph[2].dateModified, '2026-02-01');
+      } else {
+        assert.match(html, /property="og:image" content="https:\/\/barnabybishop.com\/social.png"/);
+        assert.doesNotMatch(html, /article:modified_time|dateModified/);
+      }
+    }
+    const notFound = await readFile(join(directory, 'dist/404.html'), 'utf8');
+    assert.match(notFound, /noindex, nofollow/);
+    const sitemap = await readFile(join(directory, 'dist/sitemap.xml'), 'utf8');
+    const llms = await readFile(join(directory, 'dist/llms.txt'), 'utf8');
+    for (const slug of ['older-fixture', 'newer-fixture', 'interactive-fixture']) {
+      const url = 'https://barnabybishop.com/' + slug;
+      assert.ok(sitemap.includes(`<loc>${url}</loc>`));
+      assert.ok(llms.includes(`](${url})`));
+    }
+    assert.match(await readFile(join(directory, 'dist/robots.txt'), 'utf8'), /Sitemap: https:\/\/barnabybishop.com\/sitemap.xml/);
+    for (const asset of ['social.png', 'favicon-32.png', 'apple-touch-icon.png', 'override.png']) {
+      const bytes = await readFile(join(directory, 'dist', asset));
+      assert.equal(bytes.subarray(1, 4).toString(), 'PNG');
+      if (asset === 'social.png') {
+        assert.equal(bytes.readUInt32BE(16), 1200);
+        assert.equal(bytes.readUInt32BE(20), 630);
+      }
     }
     const rss = await readFile(join(directory, 'dist/rss.xml'), 'utf8');
+    assert.doesNotMatch(sitemap + rss + llms, /404|interactive-example/);
+    assert.match(rss, /<link>https:\/\/barnabybishop.com\/newer-fixture<\/link>/);
     assert.match(rss, /Summary &amp; details/);
     assert.ok(rss.indexOf('newer-fixture') < rss.indexOf('older-fixture'));
     await serve(directory, ['preview'], async (base) => {
@@ -104,10 +167,10 @@ test('real static builds, direct requests and deliberate local draft preview', {
       const standard = await (await fetch(base + '/older-fixture')).text();
       assert.match(standard, /site-header/);
       assert.match(standard, /Standard article body/);
-      assert.doesNotMatch(standard, /<script\b/);
+      assert.doesNotMatch(standard, /<script(?![^>]*type="application\/ld\+json")\b/);
       const bespoke = await (await fetch(base + '/newer-fixture')).text();
       assert.match(bespoke, /My own page/);
-      assert.doesNotMatch(bespoke, /class="site-(?:header|footer)"|<article\b|<script\b/);
+      assert.doesNotMatch(bespoke, /class="site-(?:header|footer)"|<article\b|<script(?![^>]*type="application\/ld\+json")\b/);
     });
     await serve(directory, ['dev'], async (base) => {
       assert.equal((await fetch(base + '/interactive-example')).status, 404);
