@@ -1,8 +1,16 @@
+export interface SocialImage {
+  url: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+
 export interface PostMetadata {
   title: string;
   description: string;
   published: string;
   modified?: string;
+  image?: SocialImage;
   slug: string;
   draft: boolean;
 }
@@ -47,6 +55,16 @@ export function createCatalogue(
     if (typeof data.modified === 'string' && data.modified < (data.published as string)) fail('modified precedes published');
     if (typeof data.slug !== 'string' || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(data.slug)) fail('slug must be a lowercase root slug');
     if (typeof data.draft !== 'boolean') fail('draft must be explicitly true or false');
+    if (data.image !== undefined) {
+      const image = data.image as Partial<SocialImage> | null;
+      let url: URL | undefined;
+      try { url = new URL(image?.url ?? ''); } catch {}
+      if (!url || !['https:', 'http:'].includes(url.protocol) || url.username || url.password) fail('image.url must be an absolute HTTP(S) URL');
+      if (typeof image?.alt !== 'string' || !image.alt.trim()) fail('image.alt must be non-empty text');
+      for (const dimension of ['width', 'height'] as const) {
+        if (!Number.isInteger(image?.[dimension]) || (image?.[dimension] ?? 0) <= 0) fail(`image.${dimension} must be a positive integer`);
+      }
+    }
     const slug = data.slug as string;
     if (blocked.has(slug)) fail(`reserved/static route collision: ${slug}`);
     if (slugs.has(slug)) fail(`duplicate slug: ${slug}`);

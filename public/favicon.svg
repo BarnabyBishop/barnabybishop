@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180">
+  <rect width="180" height="180" rx="24" fill="#fffaf0"/>
+  <path d="M32 35h120v120H32z" fill="#242229"/>
+  <path d="M24 27h120v120H24z" fill="#d4c5f1" stroke="#242229" stroke-width="6"/>
+  <text x="49" y="119" font-family="sans-serif" font-weight="800" font-size="90" fill="#242229">B</text>
+</svg>

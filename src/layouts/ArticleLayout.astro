@@ -8,7 +8,7 @@ const { metadata } = Astro.props;
 const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone: 'UTC' });
 ---
 <SiteShell title={metadata.title + ' — Barnaby Bishop'} description={metadata.description}
-  published={metadata.published} modified={metadata.modified} noindex={metadata.draft}>
+  noindex={metadata.draft}>
   <SiteHeader />
   <main id="content" class="reading">
     <article>

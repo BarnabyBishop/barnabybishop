@@ -1,9 +1,10 @@
 ---
-import { loadPost, routes } from '../lib/posts';
+import { catalogue, loadPost, routes } from '../lib/posts';
 export function getStaticPaths() {
   return routes.map((post) => ({ params: { slug: post.slug }, props: { source: post.source } }));
 }
 interface Props { source: string }
+Astro.locals.post = catalogue.find((post) => post.source === Astro.props.source);
 const { default: Post } = await loadPost(Astro.props.source);
 ---
 <Post />
