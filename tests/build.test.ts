@@ -19,7 +19,11 @@ async function port() {
 }
 async function serve(cwd: string, args: string[], check: (base: string) => Promise<void>, drafts = false) {
   const number = await port();
-  const child = spawn(process.execPath, [join(root, 'node_modules/astro/bin/astro.mjs'), ...args, '--ignore-lock', '--host', '127.0.0.1', '--port', String(number)], {
+  const preview = args[0] === 'preview';
+  const command = preview
+    ? [join(root, 'node_modules/wrangler/bin/wrangler.js'), 'dev', '--local', '--ip', '127.0.0.1', '--port', String(number)]
+    : [join(root, 'node_modules/astro/bin/astro.mjs'), ...args, '--ignore-lock', '--host', '127.0.0.1', '--port', String(number)];
+  const child = spawn(process.execPath, command, {
     cwd, env: { ...process.env, PREVIEW_DRAFTS: String(drafts) }, stdio: 'pipe',
   });
   let log = '';
@@ -51,7 +55,7 @@ test('real static builds, direct requests and deliberate local draft preview', {
     cwd: directory, env: { ...process.env, PREVIEW_DRAFTS: 'true' }, timeout: 30000,
   });
   try {
-    for (const name of ['src', 'public', 'astro.config.mjs', 'package.json', 'tsconfig.json']) {
+    for (const name of ['src', 'public', 'astro.config.mjs', 'package.json', 'tsconfig.json', 'wrangler.jsonc']) {
       await cp(join(root, name), join(directory, name), { recursive: true });
     }
     await symlink(join(root, 'node_modules'), join(directory, 'node_modules'), 'dir');
@@ -60,6 +64,16 @@ test('real static builds, direct requests and deliberate local draft preview', {
     assert.match(emptyHome, /Nothing published just yet/);
     assert.doesNotMatch(emptyHome, /interactive-example|<script(?![^>]*type="application\/ld\+json")\b/);
     await assert.rejects(access(join(directory, 'dist/interactive-example/index.html')));
+
+    await serve(directory, ['preview'], async (base) => {
+      for (const path of ['/', '/about']) {
+        const response = await fetch(base + path);
+        assert.equal(response.status, 200);
+        assert.match(response.headers.get('content-type')!, /text\/html/);
+        assert.doesNotMatch(await response.text(), /<script(?![^>]*type="application\/ld\+json")\b/);
+      }
+      assert.equal((await fetch(base + '/interactive-example')).status, 404);
+    });
 
     // Temporary published fixtures verify both author-owned layout choices.
     for (const [slug, published, bespoke] of [
@@ -109,7 +123,7 @@ test('real static builds, direct requests and deliberate local draft preview', {
       assert.match(html, /property="og:site_name" content="Barnaby Bishop"/);
       assert.match(html, /name="twitter:card" content="summary_large_image"/);
       assert.match(html, /type="application\/rss\+xml"[^>]*href="https:\/\/barnabybishop.com\/rss.xml"/);
-      assert.doesNotMatch(html, /localhost|127\.0\.0\.1/);
+      assert.doesNotMatch(html, /localhost|127\.0\.0\.1|workers\.dev|pages\.dev|previews\./);
       const title = html.match(/<title>(.*?)<\/title>/)![1]!;
       assert.ok(!titles.has(title));
       titles.add(title);
@@ -164,6 +178,40 @@ test('real static builds, direct requests and deliberate local draft preview', {
       assert.equal((await fetch(base + '/interactive-example')).status, 404);
       assert.equal((await fetch(base + '/does-not-exist')).status, 404);
       assert.match(await (await fetch(base + '/does-not-exist')).text(), /Nothing here/);
+      assert.equal((await fetch(base + '/nested/missing')).status, 404);
+      assert.equal((await fetch(base + '/missing.js')).status, 404);
+      for (const path of ['/about/', '/older-fixture/', '/older-fixture/index.html']) {
+        const redirect = await fetch(base + path, { redirect: 'manual' });
+        assert.equal(redirect.status, 307);
+        assert.equal(new URL(redirect.headers.get('location')!, base).pathname, path.startsWith('/about') ? '/about' : '/older-fixture');
+      }
+      for (const [path, type] of [
+        ['/robots.txt', 'text/plain'], ['/llms.txt', 'text/plain'],
+        ['/sitemap.xml', 'application/xml'], ['/rss.xml', 'application/xml'],
+        ['/social.png', 'image/png'], ['/favicon.svg', 'image/svg+xml'],
+        ['/favicon-32.png', 'image/png'], ['/apple-touch-icon.png', 'image/png'],
+      ]) {
+        const response = await fetch(base + path);
+        assert.equal(response.status, 200, path);
+        assert.ok(response.headers.get('content-type')?.includes(type!), path + ': ' + response.headers.get('content-type'));
+      }
+      const servedHome = await (await fetch(base + '/')).text();
+      for (const match of servedHome.matchAll(/<link[^>]*href="([^"]+\.css)"/g)) {
+        assert.ok(match[1]!.startsWith('/'));
+        const response = await fetch(base + match[1]);
+        assert.equal(response.status, 200);
+        assert.match(response.headers.get('content-type')!, /text\/css/);
+        assert.doesNotMatch(await response.text(), /@import|https?:|@font-face/);
+      }
+      const interactiveResponse = await fetch(base + '/interactive-fixture');
+      const interactivePage = await interactiveResponse.text();
+      assert.match(interactivePage, /<script(?![^>]*type="application\/ld\+json")\b/);
+      for (const match of interactivePage.matchAll(/<script[^>]*src="([^"]+)"/g)) {
+        assert.ok(match[1]!.startsWith('/'));
+        const response = await fetch(base + match[1]);
+        assert.equal(response.status, 200);
+        assert.match(response.headers.get('content-type')!, /javascript/);
+      }
       const standard = await (await fetch(base + '/older-fixture')).text();
       assert.match(standard, /site-header/);
       assert.match(standard, /Standard article body/);
