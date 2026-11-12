@@ -2,6 +2,27 @@
   <span>© {new Date().getUTCFullYear()} Barnaby Bishop</span>
   <a href="/rss.xml">RSS</a>
 </footer>
+
 <style>
-  a { color: var(--color-ink); }
+  @layer layout {
+    .site-footer {
+      position: relative;
+      z-index: 2;
+      width: var(--width-content);
+      margin-inline: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      margin-top: var(--space-5);
+      padding-block: var(--space-3) var(--space-4);
+      border-top: var(--border-strong);
+      font-size: var(--text-small);
+    }
+  }
+
+  a {
+    color: var(--color-ink);
+  }
 </style>

@@ -24,35 +24,156 @@ const gridLines = Array.from({ length: Math.ceil((gridSize - cell / 2) / cell) }
   </>}
 </div>
 <style>
-  .decorations { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
-  .shape { position: absolute; overflow: visible; stroke: var(--color-ink); stroke-width: 4; stroke-linejoin: round; stroke-linecap: round; rotate: var(--turn, 0deg); }
-  .blue-squiggle { width: calc(280 * var(--n)); left: calc(-70 * var(--n)); top: calc(93 * var(--n)); --turn: -24deg; --drift: 40px; }
-  .plus { width: calc(44 * var(--n)); left: 47%; top: calc(53 * var(--n)); --drift: -30px; }
-  .circle { width: calc(220 * var(--n)); right: calc(150 * var(--n)); top: calc(33 * var(--n)); --drift: 50px; }
-  .dots { width: calc(260 * var(--n)); right: calc(-30 * var(--n)); top: calc(153 * var(--n)); --drift: 25px; }
-  .pill-shape { width: calc(170 * var(--n)); right: calc(300 * var(--n)); top: calc(var(--name-top) + 283 * var(--n)); --turn: -28deg; --drift: -60px; }
-  .ink-squiggle { width: calc(340 * var(--n)); right: calc(-40 * var(--n)); top: calc(var(--name-top) + 423 * var(--n)); --turn: -14deg; --drift: -40px; }
-  .triangle { width: calc(300 * var(--n)); left: calc(var(--inset) - 120 * var(--n)); top: calc(var(--name-top) + 110 * var(--n)); stroke-width: 2.6; --turn: -45deg; --drift: 35px; }
-  .grid { width: calc(540 * var(--n)); left: calc(-100 * var(--n)); top: calc(30 * var(--n)); --turn: -14deg; --drift: 30px; }
-  .half { width: calc(140 * var(--n)); right: calc(-30 * var(--n)); top: calc(330 * var(--n)); --turn: -20deg; --drift: -50px; }
+  .decorations {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .shape {
+    position: absolute;
+    overflow: visible;
+    stroke: var(--color-ink);
+    stroke-width: 4;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    rotate: var(--turn, 0deg);
+  }
+
+  .blue-squiggle {
+    width: calc(280 * var(--n));
+    left: calc(-70 * var(--n));
+    top: calc(93 * var(--n));
+    --turn: -24deg;
+    --drift: 40px;
+  }
+
+  .plus {
+    width: calc(44 * var(--n));
+    left: 47%;
+    top: calc(53 * var(--n));
+    --drift: -30px;
+  }
+
+  .circle {
+    width: calc(220 * var(--n));
+    right: calc(150 * var(--n));
+    top: calc(33 * var(--n));
+    --drift: 50px;
+  }
+
+  .dots {
+    width: calc(260 * var(--n));
+    right: calc(-30 * var(--n));
+    top: calc(153 * var(--n));
+    --drift: 25px;
+  }
+
+  .pill-shape {
+    width: calc(170 * var(--n));
+    right: calc(300 * var(--n));
+    top: calc(var(--name-top) + 283 * var(--n));
+    --turn: -28deg;
+    --drift: -60px;
+  }
+
+  .ink-squiggle {
+    width: calc(340 * var(--n));
+    right: calc(-40 * var(--n));
+    top: calc(var(--name-top) + 423 * var(--n));
+    --turn: -14deg;
+    --drift: -40px;
+  }
+
+  .triangle {
+    width: calc(300 * var(--n));
+    left: calc(var(--inset) - 120 * var(--n));
+    top: calc(var(--name-top) + 110 * var(--n));
+    stroke-width: 2.6;
+    --turn: -45deg;
+    --drift: 35px;
+  }
+
+  .grid {
+    width: calc(540 * var(--n));
+    left: calc(-100 * var(--n));
+    top: calc(30 * var(--n));
+    --turn: -14deg;
+    --drift: 30px;
+  }
+
+  .half {
+    width: calc(140 * var(--n));
+    right: calc(-30 * var(--n));
+    top: calc(330 * var(--n));
+    --turn: -20deg;
+    --drift: -50px;
+  }
 
   /* On phones the name fills the width, so the top shapes move above it. */
+
   @media (max-width: 40rem) {
-    .blue-squiggle { width: calc(300 * var(--n)); left: calc(-90 * var(--n)); top: calc(50 * var(--n)); }
-    .plus { left: 52%; top: calc(80 * var(--n)); }
-    .circle { width: calc(170 * var(--n)); right: calc(60 * var(--n)); top: calc(20 * var(--n)); }
-    .dots { width: calc(220 * var(--n)); right: calc(-50 * var(--n)); top: calc(110 * var(--n)); }
-    .pill-shape { right: calc(40 * var(--n)); top: calc(var(--name-top) + 340 * var(--n)); }
-    .ink-squiggle { width: calc(380 * var(--n)); right: calc(-80 * var(--n)); top: calc(var(--name-top) + 470 * var(--n)); }
-    .half { top: auto; bottom: calc(-40 * var(--n)); right: calc(30 * var(--n)); }
+    .blue-squiggle {
+      width: calc(300 * var(--n));
+      left: calc(-90 * var(--n));
+      top: calc(50 * var(--n));
+    }
+
+    .plus {
+      left: 52%;
+      top: calc(80 * var(--n));
+    }
+
+    .circle {
+      width: calc(170 * var(--n));
+      right: calc(60 * var(--n));
+      top: calc(20 * var(--n));
+    }
+
+    .dots {
+      width: calc(220 * var(--n));
+      right: calc(-50 * var(--n));
+      top: calc(110 * var(--n));
+    }
+
+    .pill-shape {
+      right: calc(40 * var(--n));
+      top: calc(var(--name-top) + 340 * var(--n));
+    }
+
+    .ink-squiggle {
+      width: calc(380 * var(--n));
+      right: calc(-80 * var(--n));
+      top: calc(var(--name-top) + 470 * var(--n));
+    }
+
+    .half {
+      top: auto;
+      bottom: calc(-40 * var(--n));
+      right: calc(30 * var(--n));
+    }
   }
 
   /* A gentle, CSS-only parallax: each shape drifts at its own rate as the page scrolls. */
-  @keyframes drift { to { translate: 0 var(--drift, 0); } }
+
+  @keyframes drift {
+    to {
+      translate: 0 var(--drift, 0);
+    }
+  }
+
   @media (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: scroll()) {
       /* Longhands on purpose: the CSS minifier folds a shorthand plus timeline into an invalid shorthand. */
-      .shape { animation-name: drift; animation-timing-function: linear; animation-fill-mode: both; animation-timeline: scroll(root); animation-range: 0 1200px; }
+
+      .shape {
+        animation-name: drift;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: scroll(root);
+        animation-range: 0 1200px;
+      }
     }
   }
 </style>

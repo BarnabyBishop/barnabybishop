@@ -25,3 +25,84 @@ const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone: 'UT
   </main>
   <SiteFooter />
 </SiteShell>
+
+<style>
+  @layer components {
+    .date {
+      font-size: var(--text-small);
+      color: var(--color-muted);
+    }
+
+    .article-heading {
+      border-bottom: 2px solid var(--color-ink);
+      padding-bottom: var(--space-3);
+      margin-bottom: var(--space-4);
+    }
+
+    .article-heading h1 {
+      margin-block: var(--space-2) var(--space-3);
+      overflow-wrap: anywhere;
+    }
+
+    .article-heading > p:not(.date, .eyebrow) {
+      font-size: 1.2em;
+    }
+
+    .prose {
+      line-height: 1.8;
+      overflow-wrap: anywhere;
+    }
+
+    /* Post content comes through the slot, so only descendants escape scoping. */
+    .prose :global(h2) {
+      margin-top: var(--space-4);
+      font-size: var(--text-section);
+    }
+
+    .prose :global(h3) {
+      margin-top: var(--space-3);
+      font-size: 1.4em;
+    }
+
+    .prose :global(:is(h2, h3)) {
+      line-height: 1.25;
+    }
+
+    .prose :global(pre) {
+      max-width: 100%;
+      overflow-x: auto;
+      padding: var(--space-3);
+      background: var(--color-surface);
+      border: 1px solid var(--color-muted);
+      border-radius: var(--radius-card);
+    }
+
+    .prose :global(blockquote) {
+      border-left: 4px solid var(--color-ink);
+      margin-inline: 0;
+      padding: .25rem var(--space-3);
+      background: var(--color-surface);
+    }
+
+    .prose :global(code) {
+      font-size: .9em;
+    }
+
+    .prose :global(:is(ul, ol)) {
+      padding-inline-start: 1.5em;
+    }
+
+    .prose :global(table) {
+      display: block;
+      max-width: 100%;
+      overflow-x: auto;
+      border-collapse: collapse;
+    }
+
+    .prose :global(:is(th, td)) {
+      padding: var(--space-1) var(--space-2);
+      border-bottom: 1px solid var(--color-muted);
+      text-align: start;
+    }
+  }
+</style>
