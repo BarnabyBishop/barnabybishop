@@ -25,6 +25,7 @@ const gridLines = Array.from({ length: Math.ceil((gridSize - cell / 2) / cell) }
 </div>
 <style>
   .decorations {
+    --parallax-strength: 5;
     position: absolute;
     inset: 0;
     z-index: 0;
@@ -155,11 +156,11 @@ const gridLines = Array.from({ length: Math.ceil((gridSize - cell / 2) / cell) }
     }
   }
 
-  /* A gentle, CSS-only parallax: each shape drifts at its own rate as the page scrolls. */
+  /* Shared strength keeps the scroll movement easy to tune across all shapes. */
 
   @keyframes drift {
     to {
-      translate: 0 var(--drift, 0);
+      translate: 0 calc(var(--drift, 0px) * var(--parallax-strength));
     }
   }
 

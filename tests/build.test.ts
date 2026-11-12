@@ -54,6 +54,9 @@ test('real static builds, direct requests and deliberate local draft preview', {
     for (const name of ['src', 'public', 'astro.config.mjs', 'package.json', 'tsconfig.json']) {
       await cp(join(root, name), join(directory, name), { recursive: true });
     }
+    // Start with only the draft example, independent of the site's published posts.
+    await rm(join(directory, 'src/posts'), { recursive: true });
+    await cp(join(root, 'src/posts/interactive-example'), join(directory, 'src/posts/interactive-example'), { recursive: true });
     await symlink(join(root, 'node_modules'), join(directory, 'node_modules'), 'dir');
     await build();
     const emptyHome = await readFile(join(directory, 'dist/index.html'), 'utf8');
