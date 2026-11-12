@@ -25,19 +25,22 @@
     --font-display: var(--font-body);
     --font-mono: ui-monospace, 'Cascadia Code', monospace;
     --text-small: .875rem;
-    --text-body: clamp(1rem, .95rem + .25vw, 1.125rem);
-    --text-heading: clamp(2.75rem, 1.75rem + 4vw, 5.5rem);
-    --text-section: clamp(1.75rem, 1.4rem + 1.5vw, 2.25rem);
+    --text-body: clamp(1rem, .95rem + .25 * var(--fluid-unit), 1.125rem);
+    --text-heading: clamp(2.75rem, 1.75rem + 4 * var(--fluid-unit), 5.5rem);
+    --text-section: clamp(1.75rem, 1.4rem + 1.5 * var(--fluid-unit), 2.25rem);
 
     /* Spacing and widths */
     --space-1: .5rem;
     --space-2: 1rem;
-    --space-3: clamp(1.25rem, 1rem + 1vw, 2rem);
-    --space-4: clamp(2rem, 1.5rem + 2vw, 3.5rem);
-    --space-5: clamp(3rem, 2rem + 4vw, 6rem);
+    --space-3: clamp(1.25rem, 1rem + var(--fluid-unit), 2rem);
+    --space-4: clamp(2rem, 1.5rem + 2 * var(--fluid-unit), 3.5rem);
+    --space-5: clamp(3rem, 2rem + 4 * var(--fluid-unit), 6rem);
     --width-site: 67rem;
+    --width-page: calc(var(--width-site) + 8rem);
     --width-reading: 46rem;
-    --gutter: clamp(1.25rem, 5vw, 4rem);
+    /* One percent of the viewport, capped at the page's maximum width. */
+    --fluid-unit: calc(min(100vw, var(--width-page)) / 100);
+    --gutter: clamp(1.25rem, 5 * var(--fluid-unit), 4rem);
     --width-content: min(calc(100% - 2 * var(--gutter)), var(--width-site));
 
     /* Borders and shadows */
@@ -89,6 +92,8 @@
 
 @layer base {
   html {
+    /* Let decorations escape the content column; clip only at the viewport. */
+    overflow-x: clip;
     font-family: var(--font-body);
     color: var(--color-ink);
     background: var(--color-paper);
@@ -96,6 +101,10 @@
   }
 
   body {
+    position: relative;
+    width: 100%;
+    max-width: var(--width-page);
+    margin-inline: auto;
     min-height: 100svh;
     display: flex;
     flex-direction: column;
@@ -154,8 +163,8 @@
 
 @layer layout {
   .reading {
-    --text-heading: clamp(2.5rem, 1.7rem + 3vw, 4rem);
-    --text-section: clamp(1.6rem, 1.3rem + 1vw, 2.1rem);
+    --text-heading: clamp(2.5rem, 1.7rem + 3 * var(--fluid-unit), 4rem);
+    --text-section: clamp(1.6rem, 1.3rem + var(--fluid-unit), 2.1rem);
     width: min(100%, calc(var(--width-reading) + 2 * var(--gutter)));
     margin: var(--space-4) auto 0;
     padding-inline: var(--gutter);

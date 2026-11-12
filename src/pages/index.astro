@@ -30,11 +30,10 @@ const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeZone: '
   /* Page sizing shared with the decorative shapes. */
   .home {
     /* --n is one "design pixel": 1px when the name is at its full 10rem. */
-    --name-size: clamp(3.5rem, 1.75rem + 9.15vw, 10rem);
+    --name-size: clamp(3.5rem, 1.75rem + 8 * var(--fluid-unit), 10rem);
     --n: calc(var(--name-size) / 160);
     --name-top: calc(120 * var(--n));
     --inset: max(var(--gutter), (100% - var(--width-site)) / 2);
-    overflow-x: clip;
   }
 
   .hero, .writing {
@@ -44,7 +43,7 @@ const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeZone: '
 
   /* Hero and name */
   .hero {
-    min-height: calc(var(--name-top) + 600 * var(--n));
+    min-height: calc(var(--name-top) + 500 * var(--n));
   }
 
   h1 {
@@ -116,7 +115,7 @@ const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeZone: '
 
   h3 {
     margin: 0;
-    font-size: clamp(1.25rem, 1rem + 1vw, 1.65rem);
+    font-size: clamp(1.25rem, 1rem + var(--fluid-unit), 1.65rem);
     letter-spacing: -.02em;
   }
 
