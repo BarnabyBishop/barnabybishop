@@ -33,6 +33,7 @@ const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeZone: '
     --name-top: calc(120 * var(--n));
     --inset: max(var(--gutter), (100% - var(--width-site)) / 2);
     overflow-x: clip;
+    max-width: var(--width-site);
   }
   .hero, .writing { position: relative; padding-inline: var(--inset); }
   .hero { min-height: calc(var(--name-top) + 600 * var(--n)); }
