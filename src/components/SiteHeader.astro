@@ -4,6 +4,11 @@ const { current } = Astro.props;
 ---
 <a class="skip-link" href="#content">Skip to content</a>
 <header class="site-header">
-  <a class="wordmark" href="/" aria-current={current === 'home' ? 'page' : undefined}>Barnaby Bishop<span aria-hidden="true">✳</span></a>
-  <nav aria-label="Main"><a class="tactile" href="/about" aria-current={current === 'about' ? 'page' : undefined}>About <span aria-hidden="true">↗</span></a></nav>
+  <a class="home-mark" href="/" aria-label="Barnaby Bishop, home" aria-current={current === 'home' ? 'page' : undefined}>
+    <svg viewBox="0 0 40 40" aria-hidden="true" focusable="false"><circle cx="20" cy="20" r="17" fill="var(--color-yellow)" stroke="var(--color-ink)" stroke-width="3.5" /><path d="M11 22q4.5-8 9 0t9 0" fill="none" stroke="var(--color-ink)" stroke-width="3.5" stroke-linecap="round" /></svg>
+  </a>
+  <nav class="site-nav" aria-label="Main">
+    <a class="pill" href="/#writing">Writing</a>
+    <a class="pill" href="/about" aria-current={current === 'about' ? 'page' : undefined}>About</a>
+  </nav>
 </header>
