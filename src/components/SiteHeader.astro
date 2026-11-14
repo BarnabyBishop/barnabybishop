@@ -4,6 +4,99 @@ const { current } = Astro.props;
 ---
 <a class="skip-link" href="#content">Skip to content</a>
 <header class="site-header">
-  <a class="wordmark" href="/" aria-current={current === 'home' ? 'page' : undefined}>Barnaby Bishop<span aria-hidden="true">✳</span></a>
-  <nav aria-label="Main"><a class="tactile" href="/about" aria-current={current === 'about' ? 'page' : undefined}>About <span aria-hidden="true">↗</span></a></nav>
+  <a class="home-mark" href="/" aria-label="Barnaby Bishop, home" aria-current={current === 'home' ? 'page' : undefined}>
+    <svg viewBox="0 0 40 40" aria-hidden="true" focusable="false"><circle cx="20" cy="20" r="17" fill="var(--color-yellow)" stroke="var(--color-ink)" stroke-width="3.5" /><path d="M11 22q4.5-8 9 0t9 0" fill="none" stroke="var(--color-ink)" stroke-width="3.5" stroke-linecap="round" /></svg>
+  </a>
+  <nav class="site-nav" aria-label="Main">
+    <a class="pill" href="/#writing">Writing</a>
+    <a class="pill" href="/about" aria-current={current === 'about' ? 'page' : undefined}>About</a>
+  </nav>
 </header>
+
+<style>
+  @layer layout {
+    .site-header {
+      position: relative;
+      z-index: 2;
+      width: var(--width-content);
+      margin-inline: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      padding-block: var(--space-3) calc(var(--space-3) - .25rem);
+      border-bottom: var(--border-strong);
+    }
+  }
+
+  @layer components {
+    .home-mark {
+      display: block;
+      width: 2.6rem;
+      height: 2.6rem;
+    }
+
+    .home-mark svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .site-nav {
+      display: flex;
+      gap: .75rem;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: .3rem 1.1rem;
+      border: var(--border-strong);
+      border-radius: var(--radius-pill);
+      background: var(--color-surface);
+      color: var(--color-ink);
+      box-shadow: var(--shadow-small);
+      text-decoration: none;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .pill:hover {
+      translate: -1px -1px;
+      box-shadow: 4px 4px 0 var(--color-shadow);
+    }
+
+    .pill:active {
+      translate: 3px 3px;
+      box-shadow: none;
+    }
+
+    .pill[aria-current='page'] {
+      background: var(--color-yellow);
+    }
+  }
+
+  @layer utilities {
+    .skip-link {
+      position: absolute;
+      top: -10rem;
+      left: var(--space-2);
+      padding: var(--space-2);
+      background: var(--color-yellow);
+      color: var(--color-ink);
+      border: var(--border-strong);
+      z-index: 10;
+    }
+
+    .skip-link:focus {
+      top: var(--space-2);
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .pill {
+        transition: translate var(--motion-duration) var(--motion-easing), box-shadow var(--motion-duration) var(--motion-easing);
+      }
+    }
+  }
+</style>

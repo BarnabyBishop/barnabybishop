@@ -4,70 +4,185 @@ import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import Decorations from '../components/Decorations.astro';
 import { posts } from '../lib/posts';
+const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeZone: 'UTC' });
 ---
 <SiteShell>
   <SiteHeader current="home" />
-  <main id="content">
+  <main id="content" class="home">
     <section class="hero" aria-labelledby="name">
-      <p class="eyebrow">A personal corner of the internet</p>
-      <h1 id="name"><span>Barnaby</span><span>Bishop<span class="full-stop" aria-hidden="true">.</span></span></h1>
-      <div class="hero-art"><Decorations /></div>
-      <div class="hello"><p>A little space for thoughts,<br />ideas &amp; things in progress.</p><a class="tactile" href="/about">Hello, I’m Barnaby <span aria-hidden="true">↗</span></a></div>
-      <svg class="hero-squiggle" viewBox="0 0 220 48" aria-hidden="true" focusable="false"><path d="m5 26 25-16 25 24 25-24 25 24 25-24 25 24 25-24 25 16" /></svg>
+      <Decorations area="hero" />
+      <h1 id="name"><span class="highlight">Barnaby</span> <span>Bishop</span></h1>
     </section>
-    <section class="posts" aria-labelledby="posts">
-      <header class="posts-heading"><h2 id="posts">Posts<span aria-hidden="true">↘</span></h2><p>Words, when they’re ready.</p></header>
-      {posts.length ? <ol>{posts.map((post) => <li>
-        <time datetime={post.published}>{new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(post.published))}</time>
-        <h3><a href={`/${post.slug}`}>{post.title}<span aria-hidden="true"> ↗</span></a></h3><p>{post.description}</p>
-      </li>)}</ol> : <div class="empty"><span class="empty-star" aria-hidden="true">✳</span><div><h3>Something good takes a little space.</h3><p>Nothing published just yet. There’s room for something good.</p></div></div>}
+    <section class="writing" aria-labelledby="writing">
+      <Decorations area="writing" />
+      <h2 id="writing">Writing</h2>
+      {posts.length ? <ol>{posts.map((post) => <li class="card">
+        <time datetime={post.published}>{date.format(new Date(post.published))}</time>
+        <h3><a href={`/${post.slug}`}>{post.title}</a></h3>
+        <span class="arrow" aria-hidden="true">→</span>
+      </li>)}</ol> : <p class="card empty">Nothing published just yet.</p>}
     </section>
   </main>
   <SiteFooter />
 </SiteShell>
+
 <style>
-  main { width: min(100%, var(--width-site)); margin-inline: auto; padding-inline: var(--gutter); }
-  .hero { display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr); column-gap: var(--space-3); padding-block: var(--space-4) var(--space-5); position: relative; container-type: inline-size; }
-  .eyebrow { grid-column: 1 / -1; margin-block: 0 var(--space-4); }
-  h1 { font-size: clamp(4rem, 11.7vw, 9.5rem); font-size: clamp(4rem, 13.2cqi, 9.5rem); font-weight: 950; line-height: .95; letter-spacing: -.075em; margin: 0; align-self: center; }
-  h1 > span { display: block; }
-  h1 > span:first-child { text-shadow: 3px 3px 0 var(--color-pink); }
-  h1 > span:last-child { margin-left: .07em; color: var(--color-lavender); -webkit-text-stroke: 2px var(--color-ink); paint-order: stroke fill; text-shadow: 4px 4px 0 var(--color-ink); }
-  .full-stop { color: var(--color-pink); }
-  .hero-art { grid-column: 2; grid-row: 2 / 4; min-height: 24rem; margin-top: -2rem; }
-  .hello { padding-top: var(--space-3); }
-  .hello p { margin-block: 0 var(--space-3); }
-  .hello .tactile { background: var(--color-pink); transform: rotate(-2deg); }
-  .hello .tactile:hover { transform: rotate(-2deg) translate(-2px, -2px); }
-  .hero-squiggle { position: absolute; width: 9rem; right: 43%; bottom: 1rem; stroke: var(--color-ink); stroke-width: 4; fill: none; }
-  .posts { padding-top: var(--space-3); }
-  .posts-heading { border-bottom: var(--border-strong); padding-bottom: var(--space-2); display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: var(--space-2); }
-  h2 { margin: 0; font-size: var(--text-section); letter-spacing: -.04em; }
-  h2 span { display: inline-block; margin-left: var(--space-3); }
-  .posts-heading p { font-size: var(--text-small); margin: 0; }
-  ol { list-style: none; padding: 0; margin-block: var(--space-3) 0; display: grid; gap: var(--space-3); }
-  li { border: var(--border-strong); border-radius: var(--radius-card); padding: var(--space-3); background: var(--color-surface); box-shadow: var(--shadow-hard); min-width: 0; }
-  li:nth-child(3n + 1) { background: var(--color-mint); }
-  li:nth-child(3n + 2) { background: var(--color-lavender); }
-  li h3 { font-size: clamp(1.5rem, 3vw, 2rem); margin-block: var(--space-1) var(--space-2); overflow-wrap: anywhere; }
-  li a { color: var(--color-ink); }
-  li p { margin: 0; }
-  time { font-size: var(--text-small); }
-  .empty { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); margin-top: var(--space-3); border: var(--border-strong); border-radius: var(--radius-card); box-shadow: var(--shadow-hard); background: var(--color-lavender); }
-  .empty-star { flex: none; font-size: 4rem; line-height: 1; }
-  .empty h3 { margin: 0 0 var(--space-1); font-size: clamp(1.2rem, 2vw, 1.5rem); }
-  .empty p { margin: 0; font-size: 1rem; }
-  @media (min-width: 55rem) { ol { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (max-width: 42rem) {
-    .hero { grid-template-columns: minmax(0, 1fr); padding-top: var(--space-3); }
-    .eyebrow { font-size: .7rem; letter-spacing: .08em; margin-bottom: var(--space-3); }
-    h1 { font-size: clamp(2rem, 19cqi, 7rem); }
-    .hero-art { grid-column: 1; grid-row: 3; height: 11rem; min-height: 0; margin: var(--space-3) 0 0; width: min(100%, 24rem); justify-self: center; }
-    .hello { padding-top: var(--space-2); }
-    .hero-squiggle { width: 5rem; right: 0; bottom: 1rem; }
-    .empty { align-items: start; }
-    .empty-star { font-size: 2rem; }
+  /* Page sizing shared with the decorative shapes. */
+  .home {
+    /* --n is one "design pixel": 1px when the name is at its full 10rem. */
+    --name-size: clamp(3.5rem, 1.75rem + 8 * var(--fluid-unit), 10rem);
+    --n: calc(var(--name-size) / 160);
+    --name-top: calc(120 * var(--n));
+    --inset: max(var(--gutter), (100% - var(--width-site)) / 2);
   }
-  @container (min-width: 55rem) { .hello p { font-size: 1.25rem; } }
-  @media (forced-colors: active) { h1 > span:last-child { -webkit-text-stroke: 0; text-shadow: none; color: CanvasText; } }
+
+  .hero, .writing {
+    position: relative;
+    padding-inline: var(--inset);
+  }
+
+  /* Hero and name */
+  .hero {
+    min-height: calc(var(--name-top) + 500 * var(--n));
+  }
+
+  h1 {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    padding-top: var(--name-top);
+    font-size: var(--name-size);
+    line-height: .92;
+    letter-spacing: -.05em;
+  }
+
+  h1 span {
+    display: block;
+    width: max-content;
+    max-width: 100%;
+  }
+
+  .highlight {
+    margin: 0 0 .06em -.14em;
+    padding: .02em .14em .08em;
+    background: var(--color-teal);
+    border: var(--border-strong);
+    border-radius: var(--radius-card);
+    box-shadow: 8px 8px 0 var(--color-shadow);
+    rotate: -2deg;
+  }
+
+  /* Writing list and cards */
+  .writing {
+    padding-block: var(--space-3) var(--space-5);
+  }
+
+  h2 {
+    position: relative;
+    margin: 0 0 var(--space-3);
+    font-size: var(--text-section);
+  }
+
+  ol {
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1.25rem;
+    max-width: 56rem;
+  }
+
+  .card {
+    position: relative;
+    background: var(--color-surface);
+    border: var(--border-strong);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-hard);
+  }
+
+  li {
+    display: grid;
+    grid-template-columns: 8.5rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--space-3);
+    padding: 1.25rem 1.75rem;
+  }
+
+  time {
+    font-size: var(--text-small);
+  }
+
+  h3 {
+    margin: 0;
+    font-size: clamp(1.25rem, 1rem + var(--fluid-unit), 1.65rem);
+    letter-spacing: -.02em;
+  }
+
+  h3 a {
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+
+  h3 a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+
+  .arrow {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  /* Card interactions */
+  li:hover {
+    translate: -2px -2px;
+    box-shadow: calc(var(--shadow-offset) + 2px) calc(var(--shadow-offset) + 2px) 0 var(--color-shadow);
+  }
+
+  li:hover h3 a {
+    text-decoration: underline;
+    text-decoration-thickness: .1em;
+  }
+
+  li:has(a:focus-visible) {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 4px;
+  }
+
+  h3 a:focus-visible {
+    outline: none;
+  }
+
+  /* Empty writing list */
+  .empty {
+    position: relative;
+    margin: 0;
+    padding: 1.25rem 1.75rem;
+    max-width: 56rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    li {
+      transition: translate var(--motion-duration) var(--motion-easing), box-shadow var(--motion-duration) var(--motion-easing);
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .home {
+      --name-top: calc(230 * var(--n));
+    }
+
+    li {
+      grid-template-columns: minmax(0, 1fr);
+      gap: .25rem;
+      padding: 1rem 1.25rem;
+    }
+
+    .arrow {
+      display: none;
+    }
+  }
 </style>

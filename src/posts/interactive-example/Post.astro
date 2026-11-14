@@ -18,9 +18,26 @@ import metadata from './metadata';
     activate it with a pointer, Enter or Space to cycle through a few more.</p>
 </ArticleLayout>
 <style>
-  .experiment { margin-block: 2rem; padding: 1.5rem; border: 2px solid var(--ink); background: var(--mint); box-shadow: 5px 5px 0 var(--ink); }
-  button { font: inherit; background: var(--paper); color: var(--ink); border: 2px solid; padding: .65rem 1rem; cursor: pointer; }
-  [data-thought] { min-height: 3.5em; }
+  .experiment {
+    margin-block: 2rem;
+    padding: 1.5rem;
+    border: 2px solid var(--ink);
+    background: var(--mint);
+    box-shadow: 5px 5px 0 var(--ink);
+  }
+
+  button {
+    font: inherit;
+    background: var(--paper);
+    color: var(--ink);
+    border: 2px solid;
+    padding: .65rem 1rem;
+    cursor: pointer;
+  }
+
+  [data-thought] {
+    min-height: 3.5em;
+  }
 </style>
 <script>
   const thoughts = [

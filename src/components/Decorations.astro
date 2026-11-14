@@ -1,30 +1,180 @@
-<div class="decorations" aria-hidden="true">
-  <svg class="decoration loop" viewBox="0 0 160 160" focusable="false"><circle cx="80" cy="80" r="62" /></svg>
-  <svg class="decoration triangle" viewBox="0 0 150 150" focusable="false"><path d="M75 14 140 132H10Z" /></svg>
-  <svg class="decoration wave" viewBox="0 0 210 80" focusable="false"><path d="M8 48Q24 0 42 40T78 40T114 40T150 40T186 40" /></svg>
-  <svg class="decoration zigzag" viewBox="0 0 100 160" focusable="false"><path d="m20 12 54 28-54 28 54 28-54 28 54 28" /></svg>
-  <span class="decoration lozenge"></span>
-  <span class="decoration dot"></span>
-  <span class="decoration dash"></span>
+---
+// Memphis shapes for the homepage. Sizes and offsets are written in "design pixels"
+// (the 1440px mock-up) and multiplied by --n, which tracks the size of the name.
+interface Props { area: 'hero' | 'writing' }
+const { area } = Astro.props;
+const squiggle = 'M5 25q13.75-22 27.5 0t27.5 0 27.5 0 27.5 0 27.5 0 27.5 0 27.5 0 27.5 0';
+// An open grid: lines overhang the last crossing by half a cell, so there's no outer border.
+const gridSize = 540, cell = 26;
+const gridLines = Array.from({ length: Math.ceil((gridSize - cell / 2) / cell) }, (_, i) => cell / 2 + i * cell)
+  .flatMap((at) => [`M${at} 0V${gridSize}`, `M0 ${at}H${gridSize}`]).join('');
+---
+<div class:list={['decorations', area]} aria-hidden="true">
+  {area === 'hero' ? <>
+    <svg class="shape blue-squiggle" viewBox="0 0 220 50" focusable="false"><path d={squiggle} fill="none" stroke="var(--color-blue)" stroke-width="10" /></svg>
+    <svg class="shape plus" viewBox="0 0 40 40" focusable="false"><path d="M20 5v30M5 20h30" fill="none" stroke="var(--color-pink)" stroke-width="7" /></svg>
+    <svg class="shape circle" viewBox="0 0 100 100" focusable="false"><circle cx="50" cy="50" r="46" fill="var(--color-pink)" /></svg>
+    <svg class="shape dots" viewBox="0 0 225 190" focusable="false"><defs><pattern id="hero-dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="8" cy="8" r="2.6" fill="var(--color-ink)" /></pattern></defs><rect width="225" height="190" fill="url(#hero-dots)" stroke="none" /></svg>
+    <svg class="shape pill-shape" viewBox="0 0 140 44" focusable="false"><rect x="3" y="3" width="134" height="38" rx="19" fill="var(--color-blue)" /></svg>
+    <svg class="shape ink-squiggle" viewBox="0 0 220 50" focusable="false"><path d={squiggle} fill="none" stroke-width="7" /></svg>
+    <svg class="shape triangle" viewBox="0 0 100 85" focusable="false"><path d="M50 4 96 81H4Z" fill="var(--color-yellow)" /></svg>
+  </> : <>
+    <svg class="shape grid" viewBox={`0 0 ${gridSize} ${gridSize}`} focusable="false"><path d={gridLines} fill="none" stroke-width="2" stroke-opacity=".5" /></svg>
+    <svg class="shape half" viewBox="0 0 100 50" focusable="false"><path d="M4 46a46 46 0 0 1 92 0Z" fill="var(--color-teal)" /></svg>
+  </>}
 </div>
 <style>
-  .decorations { position: relative; min-width: 0; height: 100%; }
-  .decoration { position: absolute; overflow: visible; }
-  svg { stroke: var(--color-ink); stroke-width: var(--decoration-stroke); stroke-linejoin: round; }
-  .loop { width: 44%; top: 7%; right: 12%; fill: var(--color-pink); filter: drop-shadow(var(--decoration-shadow)); }
-  .triangle { width: 38%; bottom: 10%; left: 5%; fill: var(--color-yellow); transform: rotate(-14deg); filter: drop-shadow(var(--decoration-shadow)); }
-  .wave { width: 65%; top: 48%; right: 0; fill: none; stroke-width: 7; transform: rotate(-16deg); }
-  .zigzag { width: 19%; top: 5%; left: 3%; fill: none; stroke-width: 7; transform: rotate(9deg); }
-  .lozenge { width: 22%; height: 11%; right: 0; bottom: 6%; border: var(--border-strong); background: var(--color-mint); transform: rotate(-28deg); box-shadow: var(--shadow-hard); }
-  .dot { width: 9%; aspect-ratio: 1; border: var(--border-strong); border-radius: var(--radius-round); background: var(--color-lavender); top: 37%; left: 19%; }
-  .dash { width: 15%; height: var(--border-width); background: var(--color-ink); bottom: 8%; left: 54%; transform: rotate(40deg); }
-  @media (max-width: 42rem) {
-    .loop { width: 32%; right: 12%; top: 3%; }
-    .triangle { width: 29%; left: 5%; bottom: 7%; }
-    .wave { width: 45%; right: 0; top: 56%; }
-    .zigzag { width: 14%; left: 3%; top: 0; }
-    .dot { width: 7%; top: 18%; left: 35%; }
-    .lozenge { width: 17%; right: 0; bottom: 2%; height: 10%; }
-    .dash { width: 10%; left: 45%; bottom: 12%; }
+  .decorations {
+    --parallax-strength: 5;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .shape {
+    position: absolute;
+    overflow: visible;
+    stroke: var(--color-ink);
+    stroke-width: 4;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    rotate: var(--turn, 0deg);
+  }
+
+  .blue-squiggle {
+    width: calc(280 * var(--n));
+    left: calc(-70 * var(--n));
+    top: calc(93 * var(--n));
+    --turn: -24deg;
+    --drift: 40px;
+  }
+
+  .plus {
+    width: calc(44 * var(--n));
+    left: 47%;
+    top: calc(53 * var(--n));
+    --drift: -30px;
+  }
+
+  .circle {
+    width: calc(220 * var(--n));
+    right: calc(150 * var(--n));
+    top: calc(33 * var(--n));
+    --drift: 50px;
+  }
+
+  .dots {
+    width: calc(260 * var(--n));
+    right: calc(-30 * var(--n));
+    top: calc(153 * var(--n));
+    --drift: 25px;
+  }
+
+  .pill-shape {
+    width: calc(170 * var(--n));
+    right: calc(300 * var(--n));
+    top: calc(var(--name-top) + 283 * var(--n));
+    --turn: -28deg;
+    --drift: -60px;
+  }
+
+  .ink-squiggle {
+    width: calc(340 * var(--n));
+    right: calc(-40 * var(--n));
+    top: calc(var(--name-top) + 423 * var(--n));
+    --turn: -14deg;
+    --drift: -40px;
+  }
+
+  .triangle {
+    width: calc(300 * var(--n));
+    left: calc(var(--inset) - 120 * var(--n));
+    top: calc(var(--name-top) + 90 * var(--n));
+    stroke-width: 2.6;
+    --turn: -45deg;
+    --drift: 35px;
+  }
+
+  .grid {
+    width: calc(540 * var(--n));
+    left: calc(-100 * var(--n));
+    top: calc(30 * var(--n));
+    --turn: -14deg;
+    --drift: 30px;
+  }
+
+  .half {
+    width: calc(140 * var(--n));
+    right: calc(-30 * var(--n));
+    top: calc(330 * var(--n));
+    --turn: -20deg;
+    --drift: -50px;
+  }
+
+  /* On phones the name fills the width, so the top shapes move above it. */
+
+  @media (max-width: 40rem) {
+    .blue-squiggle {
+      width: calc(300 * var(--n));
+      left: calc(-90 * var(--n));
+      top: calc(50 * var(--n));
+    }
+
+    .plus {
+      left: 52%;
+      top: calc(80 * var(--n));
+    }
+
+    .circle {
+      width: calc(170 * var(--n));
+      right: calc(60 * var(--n));
+      top: calc(20 * var(--n));
+    }
+
+    .dots {
+      width: calc(220 * var(--n));
+      right: calc(-50 * var(--n));
+      top: calc(110 * var(--n));
+    }
+
+    .pill-shape {
+      right: calc(40 * var(--n));
+      top: calc(var(--name-top) + 340 * var(--n));
+    }
+
+    .ink-squiggle {
+      width: calc(380 * var(--n));
+      right: calc(-80 * var(--n));
+      top: calc(var(--name-top) + 470 * var(--n));
+    }
+
+    .half {
+      top: auto;
+      bottom: calc(-40 * var(--n));
+      right: calc(30 * var(--n));
+    }
+  }
+
+  /* Shared strength keeps the scroll movement easy to tune across all shapes. */
+
+  @keyframes drift {
+    to {
+      translate: 0 calc(var(--drift, 0px) * var(--parallax-strength));
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: scroll()) {
+      /* Longhands on purpose: the CSS minifier folds a shorthand plus timeline into an invalid shorthand. */
+
+      .shape {
+        animation-name: drift;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: scroll(root);
+        animation-range: 0 1200px;
+      }
+    }
   }
 </style>

@@ -14,6 +14,25 @@ import SiteFooter from '../components/SiteFooter.astro';
   <SiteFooter />
 </SiteShell>
 <style>
-  .error-number { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); margin: 0 0 var(--space-4); font-family: var(--font-display); font-weight: 900; font-size: clamp(5rem, 20vw, 9rem); line-height: 1; letter-spacing: -.07em; color: var(--color-pink); -webkit-text-stroke: 2px var(--color-ink); paint-order: stroke fill; text-shadow: 4px 4px 0 var(--color-ink); }
-  .error-number span { font-size: .6em; color: var(--color-yellow); }
+  .error-number {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    margin: 0 0 var(--space-4);
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(5rem, 20 * var(--fluid-unit), 9rem);
+    line-height: 1;
+    letter-spacing: -.07em;
+    color: var(--color-pink);
+    -webkit-text-stroke: 2px var(--color-ink);
+    paint-order: stroke fill;
+    text-shadow: 4px 4px 0 var(--color-ink);
+  }
+
+  .error-number span {
+    font-size: .6em;
+    color: var(--color-yellow);
+  }
 </style>
