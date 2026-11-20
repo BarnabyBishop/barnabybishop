@@ -1,0 +1,45 @@
+<button class="motion-control" type="button" data-factory-toggle hidden>
+  <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+    <path class="pause-icon" d="M5 3v10m6-10v10" />
+    <path class="play-icon" d="m5 3 7 5-7 5Z" />
+  </svg>
+  <span data-toggle-label>Pause animation</span>
+</button>
+
+<style>
+  .motion-control {
+    display: inline-flex;
+    align-items: center;
+    gap: .4em;
+    padding: .35em .7em;
+    border: 1.5px solid var(--color-ink);
+    border-radius: var(--radius-pill);
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 1.4;
+    cursor: pointer;
+  }
+
+  .motion-control:hover {
+    background: var(--color-yellow);
+  }
+
+  svg {
+    width: 1em;
+    height: 1em;
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+  }
+
+  .play-icon { display: none; }
+  [data-paused] .play-icon { display: block; fill: currentColor; stroke: none; }
+  [data-paused] .pause-icon { display: none; }
+
+  @media (max-width: 30rem) {
+    .motion-control { font-size: .65rem; }
+  }
+</style>

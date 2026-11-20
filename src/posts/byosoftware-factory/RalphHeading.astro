@@ -1,0 +1,38 @@
+---
+import ralphUrl from './assets/ralph.svg?url';
+---
+<div class="ralph-heading">
+  <h2 aria-label="Ralph loopin'">Ralph l<span class="ralph-perch">oop<img
+    src={ralphUrl}
+    width="760"
+    height="804"
+    alt=""
+    aria-hidden="true"
+    loading="lazy"
+    class="ralph-image"
+  /></span>in'</h2>
+</div>
+
+<style>
+  .ralph-heading {
+    width: fit-content;
+    max-width: 100%;
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-3);
+  }
+
+  .ralph-heading h2 { margin: 0; }
+  .ralph-perch { position: relative; display: inline-block; }
+
+  .ralph-image {
+    position: absolute;
+    left: 62%;
+    top: .45em;
+    width: 1.5em;
+    max-width: none;
+    height: auto;
+    /* The shirt hem is at y≈615 in the 804-unit SVG; the hand hangs below it. */
+    transform: translate(-50%, -76.5%);
+    pointer-events: none;
+  }
+</style>
