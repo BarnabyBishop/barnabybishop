@@ -232,6 +232,14 @@ const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeZone: '
     30%, 50% { transform: translate(var(--spread-x), var(--spread-y)); }
   }
 
+  /* Keep decorative overspill out of the document's scrollable width on
+     phones and tablets, without clipping the vertical scroll effects. */
+  @media (max-width: 64rem) {
+    .home {
+      overflow-x: clip;
+    }
+  }
+
   @media (max-width: 40rem) {
     .home {
       --name-top: calc(230 * var(--n));

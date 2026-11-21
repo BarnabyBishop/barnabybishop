@@ -47,7 +47,7 @@ import metadata from './metadata';
       <Image src={previousWebsite}
         format="png"
         widths={[480, 672, 1008, 1344]}
-        sizes="(min-width: 60.4rem) 42rem, 71vw"
+        sizes="(min-width: 60.4rem) 42rem, 84vw"
         alt="The top half of the previous Barnaby Bishop website, with a portrait beside the heading and mint and blue content panels with hard charcoal shadows."
         loading="lazy" />
     </a>
@@ -59,14 +59,14 @@ import metadata from './metadata';
     <a class="screenshot-link" href={vocaberWords.src} aria-label="View the full-size Vocaber word list screenshot">
       <Image src={vocaberWords}
         widths={[240, 360, 720, 1170]}
-        sizes="(min-width: 60.4rem) 20rem, 34vw"
+        sizes="(min-width: 60.4rem) 20rem, 41vw"
         alt="Vocaber’s Korean vocabulary list, with English translations, pastel proficiency badges and a rounded bottom navigation bar."
         loading="lazy" />
     </a>
     <a class="screenshot-link" href={vocaberReview.src} aria-label="View the full-size Vocaber flashcard screenshot">
       <Image src={vocaberReview}
         widths={[240, 360, 720, 1170]}
-        sizes="(min-width: 60.4rem) 20rem, 34vw"
+        sizes="(min-width: 60.4rem) 20rem, 41vw"
         alt="Vocaber’s review screen showing a flashcard for 닮다, meaning to resemble or be alike, with an example sentence and a solid charcoal shadow."
         loading="lazy" />
     </a>
@@ -82,7 +82,7 @@ import metadata from './metadata';
       <Image src={currentWebsite}
         format="png"
         widths={[480, 672, 1008, 1344]}
-        sizes="(min-width: 60.4rem) 42rem, 71vw"
+        sizes="(min-width: 60.4rem) 42rem, 84vw"
         alt="The redesigned Barnaby Bishop homepage, with a teal nameplate, colourful Memphis shapes and both launch posts dated 21 and 19 November 2026."
         loading="lazy" />
     </a>
@@ -103,7 +103,7 @@ import metadata from './metadata';
       <Image src={impeccableExample}
         format="png"
         widths={[480, 672, 1008, 1344]}
-        sizes="(min-width: 60.4rem) 42rem, 71vw"
+        sizes="(min-width: 60.4rem) 42rem, 84vw"
         alt="Impeccable’s Slop heading above its selected 2026 example: a yellow neo-brutalist website annotated for hard offset shadows and nested cards."
         loading="lazy" />
     </a>
@@ -127,8 +127,10 @@ import metadata from './metadata';
     margin: var(--space-4) 0;
   }
 
-  .screenshot-figure {
-    margin-inline: 8%;
+  @media (min-width: 60.4rem) {
+    .screenshot-figure {
+      margin-inline: 8%;
+    }
   }
 
   .post-image img {
