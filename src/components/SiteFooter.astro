@@ -1,4 +1,5 @@
 <footer class="site-footer">
+  {Astro.slots.has('footnotes') && <div class="footer-notes"><slot name="footnotes" /></div>}
   <span>© {new Date().getUTCFullYear()} Barnaby Bishop</span>
   <a href="/rss.xml">RSS</a>
 </footer>
@@ -24,5 +25,11 @@
 
   a {
     color: var(--color-ink);
+  }
+
+  .footer-notes {
+    flex-basis: 100%;
+    min-width: 0;
+    margin-bottom: var(--space-1);
   }
 </style>

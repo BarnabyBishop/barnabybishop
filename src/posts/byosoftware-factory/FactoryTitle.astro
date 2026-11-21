@@ -27,7 +27,7 @@ const sContour = `
   <div class="title-stage">
   <h1>
     <span class="accessible-title">BYOSoftwarefactory</span>
-    <svg class="title-machine" viewBox="0 0 820 190" aria-hidden="true" focusable="false">
+    <svg class="title-machine" viewBox="0 40 820 150" aria-hidden="true" focusable="false">
       <defs>
         <clipPath id="byosf-parcel-reveal" clipPathUnits="userSpaceOnUse">
           <!-- Its left edge follows the outer lip through the entire pulse. -->
@@ -122,7 +122,7 @@ const sContour = `
     column-gap: var(--space-3);
     row-gap: var(--intro-gap);
     align-content: start;
-    min-height: calc(20.25cqw + var(--word-rest) + 4.5 * var(--letter-size) + 1.5rem);
+    min-height: calc(15.37195cqw + var(--word-rest) + 4.5 * var(--letter-size) + .25rem);
   }
 
   h1 {
@@ -276,7 +276,8 @@ const sContour = `
 
   .word-outlet {
     position: absolute;
-    top: 20cqw;
+    /* Follow the B after trimming 40 units of empty SVG space above the type. */
+    top: 15.12195cqw;
     left: 6.2%;
     width: 0;
     height: 0;

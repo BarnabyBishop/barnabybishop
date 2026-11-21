@@ -4,23 +4,83 @@
 interface Props { area: 'hero' | 'writing' }
 const { area } = Astro.props;
 const squiggle = 'M5 25q13.75-22 27.5 0t27.5 0 27.5 0 27.5 0 27.5 0 27.5 0 27.5 0 27.5 0';
+// Matching cubic segments let SVG interpolate a travelling wave smoothly.
+const wavePaths = Array.from({ length: 5 }, (_, phase) => {
+  const frequency = Math.PI / 27.5;
+  const y = (x: number) => 25 - 11 * Math.sin((x - 5) * frequency - phase * Math.PI / 2);
+  const slope = (x: number) => -11 * frequency * Math.cos((x - 5) * frequency - phase * Math.PI / 2);
+  const number = (value: number) => Number(value.toFixed(3));
+  let path = `M5 ${number(y(5))}`;
+  for (let segment = 0; segment < 16; segment++) {
+    const start = 5 + segment * 13.75;
+    const end = start + 13.75;
+    const handle = (end - start) / 3;
+    path += `C${number(start + handle)} ${number(y(start) + handle * slope(start))} ${number(end - handle)} ${number(y(end) - handle * slope(end))} ${number(end)} ${number(y(end))}`;
+  }
+  return path;
+});
+const dots = Array.from({ length: 12 }, (_, row) =>
+  Array.from({ length: 14 }, (_, column) => ({
+    x: 8 + column * 16,
+    y: 8 + row * 16,
+    delay: ((row + column) * .03).toFixed(3),
+  }))).flat();
+// Event-based SVG animations finish after a tap and replay on every click.
+const trigger = (id: string, delay = '0') =>
+  ['mouseenter', 'click', 'focusin'].map((event) => `${id}.${event}+${delay}s`).join(';');
 // An open grid: lines overhang the last crossing by half a cell, so there's no outer border.
 const gridSize = 540, cell = 26;
 const gridLines = Array.from({ length: Math.ceil((gridSize - cell / 2) / cell) }, (_, i) => cell / 2 + i * cell)
   .flatMap((at) => [`M${at} 0V${gridSize}`, `M0 ${at}H${gridSize}`]).join('');
 ---
-<div class:list={['decorations', area]} aria-hidden="true">
+<div class:list={['decorations', area]}>
   {area === 'hero' ? <>
-    <svg class="shape blue-squiggle" viewBox="0 0 220 50" focusable="false"><path d={squiggle} fill="none" stroke="var(--color-blue)" stroke-width="10" /></svg>
-    <svg class="shape plus" viewBox="0 0 40 40" focusable="false"><path d="M20 5v30M5 20h30" fill="none" stroke="var(--color-pink)" stroke-width="7" /></svg>
-    <svg class="shape circle" viewBox="0 0 100 100" focusable="false"><circle cx="50" cy="50" r="46" fill="var(--color-pink)" /></svg>
-    <svg class="shape dots" viewBox="0 0 225 190" focusable="false"><defs><pattern id="hero-dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="8" cy="8" r="2.6" fill="var(--color-ink)" /></pattern></defs><rect width="225" height="190" fill="url(#hero-dots)" stroke="none" /></svg>
-    <svg class="shape pill-shape" viewBox="0 0 140 44" focusable="false"><rect x="3" y="3" width="134" height="38" rx="19" fill="var(--color-blue)" /></svg>
-    <svg class="shape ink-squiggle" viewBox="0 0 220 50" focusable="false"><path d={squiggle} fill="none" stroke-width="7" /></svg>
-    <svg class="shape triangle" viewBox="0 0 100 85" focusable="false"><path d="M50 4 96 81H4Z" fill="var(--color-yellow)" /></svg>
+    <button class="shape blue-squiggle cluster-shape" type="button" aria-label="Play with the name and blue squiggle">
+      <svg class="cluster-piece" viewBox="0 0 220 50" aria-hidden="true" focusable="false"><path d={squiggle} fill="none" stroke="var(--color-blue)" stroke-width="10" /></svg>
+    </button>
+    <button id="plus-trigger" class="shape plus" type="button" aria-label="Spin the pink plus">
+      <svg viewBox="0 0 40 40" aria-hidden="true" focusable="false">
+        <g class="motion-art">
+          <path d="M20 5v30M5 20h30" fill="none" stroke="var(--color-pink)" stroke-width="7" />
+          <animateTransform attributeName="transform" type="rotate" from="0 20 20" to="360 20 20"
+            begin={trigger('plus-trigger')} dur="1.35s" calcMode="spline" keyTimes="0;1" keySplines=".45 0 .2 1" />
+        </g>
+        <path class="still-art" d="M20 5v30M5 20h30" fill="none" stroke="var(--color-pink)" stroke-width="7" />
+      </svg>
+    </button>
+    <svg class="shape circle" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><circle cx="50" cy="50" r="46" fill="var(--color-pink)" /></svg>
+    <button id="dots-trigger" class="shape dots" type="button" aria-label="Ripple the dots from top left to bottom right">
+      <svg viewBox="0 0 225 190" aria-hidden="true" focusable="false" fill="var(--color-ink)">
+        <defs><pattern id="hero-dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="8" cy="8" r="2.6" /></pattern></defs>
+        <g class="motion-art">
+          {dots.map((dot) => <circle cx={dot.x} cy={dot.y} r="2.6">
+            <animate attributeName="r" values="2.6;4.2;2.35;2.72;2.6" keyTimes="0;.33;.66;.84;1"
+              calcMode="spline" keySplines=".2 0 .3 1;.35 0 .6 1;.2 0 .4 1;.4 0 .6 1"
+              begin={trigger('dots-trigger', dot.delay)} dur=".55s" />
+          </circle>)}
+        </g>
+        <rect class="still-art" width="225" height="190" fill="url(#hero-dots)" stroke="none" />
+      </svg>
+    </button>
+    <svg class="shape pill-shape" viewBox="0 0 140 44" aria-hidden="true" focusable="false"><rect x="3" y="3" width="134" height="38" rx="19" fill="var(--color-blue)" /></svg>
+    <button id="ink-trigger" class="shape ink-squiggle" type="button" aria-label="Wiggle the black squiggle">
+      <svg viewBox="0 0 220 50" aria-hidden="true" focusable="false">
+        <path class="motion-art" d={wavePaths[0]} fill="none" stroke-width="7">
+          <animate attributeName="d" values={wavePaths.join(';')} keyTimes="0;.25;.5;.75;1"
+            begin={trigger('ink-trigger')} dur=".85s" calcMode="spline"
+            keySplines=".3 0 .6 1;.3 0 .6 1;.3 0 .6 1;.3 0 .6 1" />
+        </path>
+        <path class="still-art" d={wavePaths[0]} fill="none" stroke-width="7" />
+      </svg>
+    </button>
+    <button class="shape triangle cluster-shape" type="button" aria-label="Play with the name and yellow triangle">
+      <svg class="cluster-piece" viewBox="0 0 100 85" aria-hidden="true" focusable="false"><path d="M50 4 96 81H4Z" fill="var(--color-yellow)" /></svg>
+    </button>
   </> : <>
-    <svg class="shape grid" viewBox={`0 0 ${gridSize} ${gridSize}`} focusable="false"><path d={gridLines} fill="none" stroke-width="2" stroke-opacity=".5" /></svg>
-    <svg class="shape half" viewBox="0 0 100 50" focusable="false"><path d="M4 46a46 46 0 0 1 92 0Z" fill="var(--color-teal)" /></svg>
+    <button class="shape grid" type="button" aria-label="Tilt the grid">
+      <svg viewBox={`0 0 ${gridSize} ${gridSize}`} aria-hidden="true" focusable="false"><path d={gridLines} fill="none" stroke-width="2" stroke-opacity=".5" /></svg>
+    </button>
+    <svg class="shape half" viewBox="0 0 100 50" aria-hidden="true" focusable="false"><path d="M4 46a46 46 0 0 1 92 0Z" fill="var(--color-teal)" /></svg>
   </>}
 </div>
 <style>
@@ -42,12 +102,40 @@ const gridLines = Array.from({ length: Math.ceil((gridSize - cell / 2) / cell) }
     rotate: var(--turn, 0deg);
   }
 
+  button.shape {
+    display: block;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    line-height: 0;
+    cursor: pointer;
+    touch-action: manipulation;
+    pointer-events: auto;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button.shape > svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .still-art {
+    display: none;
+  }
+
   .blue-squiggle {
     width: calc(280 * var(--n));
     left: calc(-70 * var(--n));
     top: calc(93 * var(--n));
     --turn: -24deg;
     --drift: 40px;
+    --spread-x: calc(-22 * var(--n));
+    --spread-y: calc(-18 * var(--n));
+    --spread-duration: 650ms;
   }
 
   .plus {
@@ -55,6 +143,12 @@ const gridLines = Array.from({ length: Math.ceil((gridSize - cell / 2) / cell) }
     left: 47%;
     top: calc(53 * var(--n));
     --drift: -30px;
+  }
+
+  .plus::before {
+    content: '';
+    position: absolute;
+    inset: -1rem;
   }
 
   .circle {
@@ -94,6 +188,9 @@ const gridLines = Array.from({ length: Math.ceil((gridSize - cell / 2) / cell) }
     stroke-width: 2.6;
     --turn: -45deg;
     --drift: 35px;
+    --spread-x: calc(-20 * var(--n));
+    --spread-y: calc(12 * var(--n));
+    --spread-duration: 800ms;
   }
 
   .grid {
@@ -165,6 +262,31 @@ const gridLines = Array.from({ length: Math.ceil((gridSize - cell / 2) / cell) }
   }
 
   @media (prefers-reduced-motion: no-preference) {
+    .grid > svg {
+      transform: perspective(700px) rotateX(0deg) rotateY(0deg);
+      transition: transform 650ms cubic-bezier(.2, .8, .2, 1);
+    }
+
+    .grid:focus-visible > svg {
+      transform: perspective(700px) rotateX(6deg) rotateY(-7deg);
+    }
+
+    @media (hover: hover) {
+      .grid:hover > svg {
+        transform: perspective(700px) rotateX(6deg) rotateY(-7deg);
+      }
+    }
+
+    @media (hover: none) {
+      .grid:is(:hover, :focus) > svg {
+        animation: grid-tilt 1.25s cubic-bezier(.2, .8, .2, 1);
+      }
+
+      .grid:active > svg {
+        animation: none;
+      }
+    }
+
     @supports (animation-timeline: scroll()) {
       /* Longhands on purpose: the CSS minifier folds a shorthand plus timeline into an invalid shorthand. */
 
@@ -176,5 +298,17 @@ const gridLines = Array.from({ length: Math.ceil((gridSize - cell / 2) / cell) }
         animation-range: 0 1200px;
       }
     }
+  }
+
+  @keyframes grid-tilt {
+    0%, 100% { transform: perspective(700px) rotateX(0deg) rotateY(0deg); }
+    28%, 50% { transform: perspective(700px) rotateX(6deg) rotateY(-7deg); }
+  }
+
+  /* CSS animation overrides do not stop SVG's own animation clock. */
+  @media (prefers-reduced-motion: reduce) {
+    .motion-art { display: none; }
+    .still-art { display: inline; }
+    button.shape { cursor: default; }
   }
 </style>
