@@ -2,3 +2,8 @@ node_modules/
 dist/
 .astro/
 .wrangler/
+.DS_Store
+
+# Private research and drafts stay local; the voice guide is public-safe.
+/notes/*
+!/notes/tone-of-voice.md

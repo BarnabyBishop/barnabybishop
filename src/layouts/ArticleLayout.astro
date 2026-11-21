@@ -3,8 +3,13 @@ import SiteShell from './SiteShell.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import type { PostMetadata } from '../lib/post-catalogue';
-interface Props { metadata: PostMetadata }
-const { metadata } = Astro.props;
+interface Props {
+  metadata: PostMetadata;
+  showDescription?: boolean;
+  dateBeforeTitle?: boolean;
+  seamlessHeading?: boolean;
+}
+const { metadata, showDescription = true, dateBeforeTitle = false, seamlessHeading = false } = Astro.props;
 const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone: 'UTC' });
 ---
 <SiteShell title={metadata.title + ' — Barnaby Bishop'} description={metadata.description}
@@ -12,11 +17,12 @@ const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone: 'UT
   <SiteHeader />
   <main id="content" class="reading">
     <article>
-      <header class="article-heading">
+      <header class:list={['article-heading', { 'date-before-title': dateBeforeTitle, 'seamless-heading': seamlessHeading }]}>
         {metadata.draft && <p class="eyebrow">Unpublished · local preview</p>}
-        <h1>{metadata.title}</h1>
-        <p>{metadata.description}</p>
-        <p class="date"><time datetime={metadata.published}>{date.format(new Date(metadata.published))}</time>
+        <slot name="title"><h1>{metadata.title}</h1></slot>
+        {showDescription && <p>{metadata.description}</p>}
+        <p class="date"><slot name="heading-controls" />
+          <time datetime={metadata.published}>{date.format(new Date(metadata.published))}</time>
           {metadata.modified && <> · Updated <time datetime={metadata.modified}>{date.format(new Date(metadata.modified))}</time></>}
         </p>
       </header>
@@ -37,6 +43,30 @@ const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone: 'UT
       border-bottom: 2px solid var(--color-ink);
       padding-bottom: var(--space-3);
       margin-bottom: var(--space-4);
+    }
+
+    .date-before-title {
+      position: relative;
+      padding-top: var(--space-2);
+    }
+
+    .date-before-title > .date {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: .75rem;
+      max-width: 100%;
+    }
+
+    .seamless-heading {
+      border-bottom: 0;
+      padding-bottom: 0;
+      margin-bottom: var(--space-1);
     }
 
     .article-heading h1 {

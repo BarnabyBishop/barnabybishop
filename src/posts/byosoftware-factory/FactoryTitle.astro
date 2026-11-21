@@ -1,0 +1,461 @@
+---
+const words = ['Bring', 'Build', 'Borrow', 'Buy'];
+const rollers = [401, 457, 513, 569, 625, 681, 737, 791];
+// Schibsted Grotesk 900 at the same 145-unit size as the other initials.
+// Only the upper terminal is reshaped to flow into the outlet. Keeping this
+// as one contour removes the original glyph's diagonal cut beneath the join.
+const sContour = `
+  M338.77 167.98Q327.59 167.98 317.32 164.83Q307.05 161.68 299.97 154.78
+  Q292.89 147.88 291.12 136.69L319.94 130.88Q320.58 138.18 325.04 141.33
+  Q329.5 144.48 338.06 144.48Q344.37 144.48 347.48 143.2
+  Q350.6 141.93 351.62 140.12Q352.65 138.32 352.65 136.69
+  Q352.65 132.79 348.69 130.42Q344.72 128.05 338.84 127.13L330.91 125.86
+  Q324.33 124.79 318.03 122.85Q311.73 120.9 306.63 117.47
+  Q301.53 114.03 298.52 108.62Q295.51 103.2 295.51 95.27
+  Q295.51 85.07 300.68 77.64Q305.85 70.21 315.27 66.14
+  Q324.68 62.06 337.43 62.06Q348.61 62.06 358.17 65.36
+  Q367.73 68.65 374.24 75.13Q380.76 81.61 389 84V105
+  C369 105 357 91.57 347.98 87.06
+  Q345 85.57 339.48 85.57Q334.1 85.57 331.27 86.88
+  Q328.44 88.19 327.41 90Q326.38 91.8 326.38 93.43
+  Q326.38 97.68 331.69 99.62Q337 101.57 344.51 102.77L352.79 104.12
+  Q360.3 105.32 367.41 108.65Q374.53 111.98 379.13 118.24
+  Q383.73 124.51 383.73 134.56Q383.73 145.61 377.82 153.04
+  Q371.91 160.48 361.75 164.23Q351.59 167.98 338.77 167.98Z`;
+---
+<div class="factory-title" data-factory-title>
+  <div class="title-stage">
+  <h1>
+    <span class="accessible-title">BYOSoftwarefactory</span>
+    <svg class="title-machine" viewBox="0 0 820 190" aria-hidden="true" focusable="false">
+      <defs>
+        <clipPath id="byosf-parcel-reveal" clipPathUnits="userSpaceOnUse">
+          <!-- Its left edge follows the outer lip through the entire pulse. -->
+          <rect class="parcel-reveal" x="395" y="0" width="500" height="200" />
+        </clipPath>
+      </defs>
+      <g class="conveyor">
+        <rect class="belt-body" x="384" y="115" width="421" height="15" rx="7.5" />
+        <path class="belt-tread" d="M394 122.5h400" />
+        {rollers.map((x) => <g class="roller" style={`--axle: ${x}px 122.5px`}>
+          <circle cx={x} cy="122.5" r="5" />
+          <path d={`M${x - 3} 122.5h6m-3-3v6`} />
+        </g>)}
+      </g>
+
+      <!-- Clip in machine coordinates, outside the parcels' moving groups. -->
+      <g clip-path="url(#byosf-parcel-reveal)">
+      {[0, 1, 2].map((index) => <g class="parcel" style={`--parcel: ${index}`}>
+        <g class="box-art" transform="scale(1.35)">
+        <path class="box-front" d="M-14-20H6V0H-14Z" />
+        <path class="box-side" d="m6-20 9-6v20L6 0Z" />
+        <path class="box-top" d="m-14-20 9-6h20l-9 6Z" />
+        <path class="box-tape" d="m-7-20 9-6h5l-9 6v8h-5Z" />
+        {index === 0 && <path class="box-stamp" d="m-7-10-3 3 3 3m7-6 3 3-3 3" />}
+        {index === 1 && <path class="box-stamp" d="m-10-10 3 3-3 3m6 0h6" />}
+        {index === 2 && <g class="box-stamp">
+          <path d="M-7-10v7m0-4h6v-3" />
+          <circle cx="-7" cy="-11" r="1.3" />
+          <circle cx="-7" cy="-3" r="1.3" />
+          <circle cx="-1" cy="-11" r="1.3" />
+        </g>}
+        </g>
+      </g>)}
+      </g>
+
+      <!-- The type occludes the parcels until they leave the S. -->
+      <g class="lettering">
+        <text x="0" y="166">B</text>
+        <text x="94" y="166">Y</text>
+        <text x="183" y="166">O</text>
+        <path d={sContour} />
+        <text class="suffix" x="375" y="174" textLength="435" lengthAdjust="spacingAndGlyphs">oftwarefactory</text>
+      </g>
+
+      <!-- A right-facing extrusion head blends into the S. The vertical lip
+           occludes the parcels until they emerge horizontally from its mouth. -->
+      <g class="output-machine">
+        <path d="M354 76C370 76 380 82 389 85V102C376 102 365 91 354 87Z" />
+        <rect x="386" y="76" width="9" height="34" rx="3" />
+        <path class="outlet-seam" d="M391 83v20" />
+      </g>
+
+      <!-- At rest this is an unaltered B. Its lower edge opens into two leaves. -->
+      <path class="hatch-opening" d="M19 159h64v9H19Z" />
+      <g class="trapdoor door-left">
+        <path d="M19 163.5h32" />
+      </g>
+      <g class="trapdoor door-right">
+        <path d="M51 163.5h32" />
+      </g>
+    </svg>
+  </h1>
+
+  <div class="word-stage" aria-hidden="true">
+    <div class="word-outlet">
+      {words.map((word, index) => <span class="falling-word" data-word={word} style={`--word: ${index}`}>
+        {[...word.slice(1)].map((letter, letterIndex) => <span class="falling-letter" style={`--letter: ${letterIndex}`}>{letter}</span>)}
+      </span>)}
+    </div>
+  </div>
+  <div class="title-intro"><slot name="intro" /></div>
+  </div>
+</div>
+
+<style>
+  .factory-title {
+    --cycle: 6s;
+    --word-rest: clamp(.35rem, 1.2cqw, .7rem);
+    /* Match the suffix's 58-unit type in the 820-unit SVG. */
+    --letter-size: 7.07317cqw;
+    --intro-gap: clamp(2rem, 6.5cqw, 3rem);
+    position: relative;
+    z-index: 1;
+    container-type: inline-size;
+    margin-block: var(--space-2) 0;
+  }
+
+  .title-stage {
+    position: relative;
+    display: grid;
+    grid-template-columns: 14% minmax(0, 1fr);
+    column-gap: var(--space-3);
+    row-gap: var(--intro-gap);
+    align-content: start;
+    min-height: calc(20.25cqw + var(--word-rest) + 4.5 * var(--letter-size) + 1.5rem);
+  }
+
+  h1 {
+    grid-column: 1 / -1;
+    margin: 0;
+    line-height: 1;
+  }
+
+  .accessible-title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .title-machine {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .title-intro {
+    grid-column: 2;
+    min-width: 0;
+    font-size: var(--text-body);
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+  }
+
+  .title-intro :global(p) {
+    margin-block: 0 var(--space-2);
+  }
+
+  .title-intro :global(blockquote) {
+    margin: var(--space-3) 0 0;
+    padding: .5rem 1.25rem;
+    border-left: 4px solid var(--color-ink);
+    background: var(--color-surface);
+  }
+
+  .title-intro :global(blockquote p) {
+    margin: 0;
+  }
+
+  .lettering {
+    font-family: var(--font-display);
+    font-size: 145px;
+    font-weight: 900;
+    letter-spacing: -8px;
+    fill: var(--color-ink);
+  }
+
+  .suffix {
+    font-size: 58px;
+    letter-spacing: -2.5px;
+  }
+
+  :is(.conveyor, .parcel, .trapdoor) {
+    stroke: var(--color-ink);
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .belt-body {
+    fill: var(--color-surface);
+  }
+
+  .belt-tread {
+    fill: none;
+    stroke-dasharray: 4 10;
+    stroke-width: 2;
+  }
+
+  .roller {
+    transform-origin: var(--axle);
+  }
+
+  .roller circle {
+    fill: var(--color-yellow);
+    stroke-width: 1.5;
+  }
+
+  .roller path {
+    stroke-width: 1;
+  }
+
+  .output-machine {
+    fill: var(--color-ink);
+  }
+
+  .output-machine,
+  .parcel-reveal {
+    transform-origin: 352px 92px;
+  }
+
+  .outlet-seam {
+    fill: none;
+    stroke: var(--color-paper);
+    stroke-width: 1.5;
+    stroke-opacity: .45;
+    stroke-linecap: round;
+  }
+
+  .parcel {
+    opacity: 0;
+    transform-origin: 0 0;
+    stroke: #704b2c;
+    stroke-width: 1.4;
+  }
+
+  .box-front { fill: #c99458; }
+  .box-side { fill: #a6743e; }
+  .box-top { fill: #e0b77f; }
+  .box-tape { fill: #f2d8a8; stroke: none; }
+
+  .box-stamp {
+    fill: none;
+    stroke: #553b28;
+    stroke-width: 1.2;
+  }
+
+  .hatch-opening {
+    fill: var(--color-paper);
+    opacity: 0;
+  }
+
+  .trapdoor {
+    fill: none;
+    stroke-width: 5;
+    stroke-linecap: butt;
+    opacity: 0;
+  }
+
+  .door-left { transform-origin: 19px 163.5px; }
+  .door-right { transform-origin: 83px 163.5px; }
+
+  /* Clip the letters inside the heading so none can cover the article. */
+  .word-stage {
+    position: absolute;
+    inset: 0;
+    overflow: clip;
+    pointer-events: none;
+  }
+
+  .word-outlet {
+    position: absolute;
+    top: 20cqw;
+    left: 6.2%;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+
+  .falling-word {
+    position: absolute;
+    top: var(--word-rest);
+    left: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--color-ink);
+    font-size: var(--letter-size);
+    font-weight: 900;
+    letter-spacing: 0;
+    line-height: .9;
+    opacity: 0;
+    transform: translateX(-50%);
+  }
+
+  .falling-letter {
+    display: block;
+    height: .9em;
+  }
+
+  /* The B in the title supplies the first letter of the resting word. */
+  .falling-word:first-child {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Three staggered boxes per six-second cycle: one extrusion every two seconds. */
+    [data-running] :is(.output-machine, .parcel-reveal) { animation: output-pop 2s infinite; }
+    [data-running] .hatch-opening { animation: hatch-gap var(--cycle) infinite; }
+    [data-running] .door-left { animation: hatch-left var(--cycle) infinite; }
+    [data-running] .door-right { animation: hatch-right var(--cycle) infinite; }
+
+    [data-running] .falling-word {
+      opacity: 0;
+      animation: word-fall calc(var(--cycle) * 4) linear infinite;
+      animation-delay: calc(var(--word) * var(--cycle));
+    }
+
+    [data-running] .falling-letter {
+      opacity: 0;
+      animation: letter-drop calc(var(--cycle) * 4) linear infinite;
+      animation-delay: calc(var(--word) * var(--cycle) + var(--letter) * .09s);
+    }
+
+    [data-running] .parcel {
+      animation: parcel-travel var(--cycle) linear infinite;
+      animation-delay: calc(var(--parcel) * 2s);
+    }
+
+    [data-running] .belt-tread { animation: tread .8s linear infinite; }
+    [data-running] .roller { animation: roll 1.6s linear infinite; }
+
+    :is([data-paused], [data-suspended]) :is(.output-machine, .parcel-reveal, .hatch-opening, .trapdoor, .falling-word, .falling-letter, .parcel, .belt-tread, .roller) {
+      animation-play-state: paused;
+    }
+  }
+
+  @keyframes hatch-left {
+    0%, 5%, 40%, 100% { opacity: 0; transform: rotate(0deg); }
+    12%, 26% { opacity: 1; transform: rotate(84deg); }
+    34% { opacity: 1; transform: rotate(-5deg); }
+    37% { opacity: 1; transform: rotate(3deg); }
+  }
+
+  @keyframes hatch-right {
+    0%, 5%, 40%, 100% { opacity: 0; transform: rotate(0deg); }
+    12%, 26% { opacity: 1; transform: rotate(-84deg); }
+    34% { opacity: 1; transform: rotate(5deg); }
+    37% { opacity: 1; transform: rotate(-3deg); }
+  }
+
+  @keyframes hatch-gap {
+    0%, 5%, 34%, 100% { opacity: 0; }
+    12%, 26% { opacity: 1; }
+  }
+
+  /* Each word gets a six-second turn in the full twenty-four-second loop. */
+  @keyframes word-fall {
+    0%, 2.9% { opacity: 0; transform: translate(-50%, 0); }
+    3%, 16% { opacity: 1; transform: translate(-50%, 0); }
+    17% { opacity: .3; transform: translate(-50%, 1rem); }
+    18%, 100% { opacity: 0; transform: translate(-50%, 2rem); }
+  }
+
+  @keyframes letter-drop {
+    0%, 2.9% { opacity: 0; transform: translateY(calc(-1 * var(--letter) * .9em - var(--word-rest) - 1em)); }
+    3.1% { opacity: 1; transform: translateY(calc(-1 * var(--letter) * .9em - var(--word-rest) - .5em)); }
+    4.8% { opacity: 1; transform: translateY(.1em); }
+    5.3%, 100% { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes parcel-travel {
+    0%, 8% { opacity: 0; transform: translate(380px, 104px) scale(.55); }
+    8.01% { opacity: 1; transform: translate(380px, 104px) scale(.55); }
+    12% { opacity: 1; transform: translate(419px, 104px) scale(1.02); }
+    17% { opacity: 1; transform: translate(435px, 113px) scale(1.03, .97); }
+    20% { opacity: 1; transform: translate(451px, 113px) scale(1); }
+    83% { opacity: 1; transform: translate(784px, 113px); }
+    88% { opacity: 0; transform: translate(805px, 113px) scale(.7); }
+    100% { opacity: 0; transform: translate(805px, 113px) scale(.7); }
+  }
+
+  @keyframes output-pop {
+    0%, 8%, 50%, 100% { transform: scale(1); }
+    19% { transform: scale(1.12, 1.07); }
+    24% { transform: scale(1.2, 1.16); }
+    29% { transform: scale(.94, .9); }
+    38% { transform: scale(1.05, 1.02); }
+  }
+
+  @keyframes tread { to { stroke-dashoffset: -14; } }
+  @keyframes roll { to { transform: rotate(360deg); } }
+
+  @media (max-width: 35rem) {
+    .title-intro {
+      grid-column: 1 / -1;
+      display: flow-root;
+    }
+
+    /* Reserve the remaining drop area beside the opening paragraph. */
+    .title-intro::before {
+      content: '';
+      float: left;
+      width: calc(14cqw + var(--space-3));
+      height: calc(4.5 * var(--letter-size) + var(--word-rest) + 2rem - 3.17073cqw - var(--intro-gap));
+    }
+
+    .title-intro > :global(p) {
+      display: flow-root;
+    }
+
+    .title-intro :global(blockquote) {
+      clear: both;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-factory-title]').forEach((factory) => {
+    const button = factory.closest('.article-heading')?.querySelector<HTMLButtonElement>('[data-factory-toggle]');
+    const label = button?.querySelector<HTMLElement>('[data-toggle-label]');
+    if (!button || !label) return;
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let paused = false;
+    let inView = true;
+
+    const syncSuspension = () => {
+      factory.toggleAttribute('data-suspended', document.hidden || !inView);
+    };
+    const syncMotion = () => {
+      factory.toggleAttribute('data-running', !reducedMotion.matches);
+      button.hidden = reducedMotion.matches;
+    };
+
+    button.addEventListener('click', () => {
+      paused = !paused;
+      factory.toggleAttribute('data-paused', paused);
+      button.toggleAttribute('data-paused', paused);
+      label.textContent = paused ? 'Resume animation' : 'Pause animation';
+    });
+    reducedMotion.addEventListener('change', syncMotion);
+    document.addEventListener('visibilitychange', syncSuspension);
+
+    const observer = new IntersectionObserver(([entry]) => {
+      inView = entry?.isIntersecting ?? false;
+      syncSuspension();
+    });
+    observer.observe(factory);
+
+    syncSuspension();
+    syncMotion();
+  });
+</script>

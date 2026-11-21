@@ -1,11 +1,172 @@
 ---
+import { Image } from 'astro:assets';
 import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import FactoryTitle from './FactoryTitle.astro';
+import FactoryMotionControl from './FactoryMotionControl.astro';
+import AgentKanban from './AgentKanban.astro';
+import RalphHeading from './RalphHeading.astro';
+import slate from './assets/slate.png';
+import codemill from './assets/codemill.png';
+import kanbanMeme from './assets/slaps-roof-of-kanban.png';
 import metadata from './metadata';
 ---
-<ArticleLayout metadata={metadata}>
-  <p>Bring your own software factory. Instead of bending every task around someone else's
-    enormous app, make a small tool that does exactly the thing you keep putting off.
-    A script to sort the mess, a page to track the project, a button that saves five
-    annoying clicks. The interesting part isn't how much software you can produce;
-    it's how little you need to make the day feel easier.</p>
+<ArticleLayout metadata={metadata} showDescription={false} dateBeforeTitle seamlessHeading>
+  <FactoryTitle slot="title">
+    <Fragment slot="intro">
+      <p>Recently I demoed to the Thinkmill team the software factory I've been building
+        for my personal apps and agent runtime. I had built one, so with a haughty
+        confidence I felt qualified to define the whole category.</p>
+
+      <blockquote>
+        <p>Autonomous agents, orchestrated into a team's development workflow.</p>
+      </blockquote>
+    </Fragment>
+  </FactoryTitle>
+  <FactoryMotionControl slot="heading-controls" />
+
+  <p>But I was picturing Kanbans, Jiras, Agiles, and Agents. Big team stuff.</p>
+
+  <p>While I was building this factory for myself, I always had larger engineering
+    teams in mind. Bringing agents into our existing workflows, maybe one at a
+    time, and deciding where humans stay in the loop.</p>
+
+  <AgentKanban />
+
+  <RalphHeading />
+
+  <p>While working with larger software teams, I was trialling different ways to
+    bring agents into my workflow. Markdown files for epics with each task
+    defined, <a href="https://ghuntley.com/loop/">Ralph loops</a> working through
+    them. Switching between harnesses, from IDE to terminal to desktop apps,
+    often juggling multiple sessions at a time.</p>
+
+  <p>That was fine for sequential tasks but the more I tried to parallelise, the
+    larger the mental overhead. Things reached a head on a project where I was
+    juggling five-plus tasks at a time for weeks on end. Each had its own agent
+    coding part, agent review, my review and team review feedback loop to keep
+    running.</p>
+
+  <p>I had notes for each ticket to remember where it was up to. I even had a
+    Trello board at one point, but I was managing all of it manually, which was a
+    huge PIA and exhausting.</p>
+
+  <h2>The Kanban strikes back</h2>
+
+  <p>I wanted agents to work through the process, and couldn't get the idea of
+    the kanban board out of my head. I'd managed software delivery teams for
+    decades with a kanban, using it felt natural, so it was where I started as
+    the UX for my own agent-runtime and software factory.</p>
+
+  <p>I plan with an agent that explores the repo and creates tickets and epics
+    once we're happy with the plan. I assign a ticket to a coding agent and it
+    works through coding before handing it off to the review agent. By the time
+    it comes to me, either the agents are at an impasse or it's ready for my
+    final review.</p>
+
+  <figure class="screenshot-figure">
+    <a class="screenshot-image" href={slate.src} aria-label="View the full-size Slate screenshot">
+      <Image src={slate}
+        widths={[480, 736, 1472]}
+        sizes="(min-width: 55rem) 46rem, 90vw"
+        alt="Slate's kanban board, with Flintstones character avatars assigned to tasks across Backlog, Todo, In Progress, Review and Done."
+        loading="lazy" />
+    </a>
+    <figcaption>I chose a Flintstones theme for my factory. I can yabba-dabba-doo
+      my way through the software development life-cycle.</figcaption>
+  </figure>
+
+  <p>One lesson I learned early was that observability is key. I needed to know
+    what an agent was up to, including its token usage and tool calls. Those
+    were things that mattered to me, so I built around them.</p>
+
+  <h2>BYO</h2>
+
+  <p>So simple, slap some agents into a Kanban, you got yourself a software
+    factory bucko.</p>
+
+  <figure class="kanban-meme">
+    <div class="meme-image">
+      <Image src={kanbanMeme}
+        widths={[480, 736, 1424]}
+        sizes="(min-width: 55rem) 46rem, 90vw"
+        alt="Car salesman gestures at a kanban board over the car window. Caption: car salesman: *slaps roof of kanban* this bad boy can fit so many agents in it"
+        loading="lazy" />
+    </div>
+  </figure>
+
+  <p>Or not. After the talk, other Thinkmillers started sharing how they were
+    improving automation on their own projects, from connecting project tracking
+    to their agents to improving tool call outputs. There were Slack bots making
+    code changes to blog articles, skipping the need for a CMS. Suddenly it was
+    hard to draw the line on what makes a factory and what doesn't.</p>
+
+  <p>X couldn't (and still can't) agree: Software Factory is cloud, it's
+    recoverability, it's observability, it's no humans in the loop, it's lots of
+    humans in the loop, it comes to you, we build it for you, you should build it yourself,{' '}
+    <a href="https://x.com/mattpocockuk/status/2119748545691402733">Software
+      Factories are bullshit</a>.</p>
+
+  <p>My picture of a software factory has expanded to cover all these ways of
+    automating parts of software development. It could be big or small, for an
+    individual or a whole team, it could be in the cloud, it could even still be
+    local.</p>
+
+  <p>What interests me is how we're giving agents more autonomy, and freeing
+    ourselves from the grind of managing too many individual agents with too
+    much context. Maybe Software Factory is just a clunky term for the next
+    evolution of how we develop software.</p>
+
+  <p>I still like my kanban. It fits the way I work and solves a problem I was
+    having (though the tools I'm building for Thinkmill's Software Factory have
+    me using it less...). But an automated Slack to blog post CMS pipeline?
+    It's SDLC, it's agent automation, it keeps humans in some of the loops, but
+    you just might not need a kanban.</p>
+
+  <figure class="screenshot-figure codemill-figure">
+    <a class="screenshot-image" href={codemill.src} aria-label="View the full-size Codemill screenshot">
+      <Image src={codemill}
+        widths={[480, 736, 1472]}
+        sizes="(min-width: 55rem) 46rem, 90vw"
+        alt="Codemill's dashboard showing planning, coding and review agents, their activity, tasks in flight and a factory console."
+        loading="lazy" />
+    </a>
+    <figcaption>We're cookin' up some nice stuff over at Thinkmill HQ.</figcaption>
+  </figure>
+
+  <p>Like building a design system or running a software project, there isn't a
+    one-size-fits-all solution when it comes to agent automation and software
+    factories. We each have our own tools, constraints and ways of working.</p>
+
+  <p>A software factory is what works for you (and the friends we made along
+    the way).</p>
+
+  <hr />
+
+  <p><em>Looking to bring agents into your team's workflow? Build your own
+    Software Factory? At <a href="https://www.thinkmill.com.au/">Thinkmill</a>,
+    we'll help you work out where they can be useful and fit the approach to
+    your project and team with your own tools.</em></p>
 </ArticleLayout>
+
+<style>
+  .screenshot-figure, .kanban-meme { margin: var(--space-4) 0; }
+
+  .screenshot-image, .meme-image {
+    display: block;
+    overflow: hidden;
+    border: 3px solid var(--color-ink);
+    border-radius: .75rem;
+    background: var(--color-surface);
+    box-shadow: 4px 4px 0 var(--color-ink);
+  }
+
+  .screenshot-image { cursor: zoom-in; }
+  .screenshot-image img, .meme-image img { display: block; width: 100%; height: auto; }
+  .screenshot-figure figcaption {
+    margin-top: var(--space-2);
+    color: var(--color-muted);
+    font-size: var(--text-small);
+    line-height: 1.6;
+    font-style: italic;
+  }
+</style>

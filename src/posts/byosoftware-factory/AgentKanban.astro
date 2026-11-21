@@ -1,0 +1,221 @@
+---
+const columns = [
+  { id: 'todo', title: 'To do' },
+  { id: 'coding', title: 'In progress' },
+  { id: 'review', title: 'Review' },
+  { id: 'done', title: 'Ready for release' },
+];
+const tickets = [
+  { title: 'Tidy up the copy', assignee: 'Designer', column: 'todo', demo: false },
+  { title: 'Add image uploads', assignee: 'Coding agent', column: 'todo', demo: true },
+  { title: 'Build the settings page', assignee: 'Engineer', column: 'coding', demo: false },
+  { title: 'Review the sign-in flow', assignee: 'Engineer', column: 'review', demo: false },
+  { title: 'Update the help page', assignee: 'Engineer', column: 'done', demo: false },
+];
+---
+<figure class="agent-kanban" data-agent-kanban aria-labelledby="agent-kanban-caption">
+  <div class="board-progress" aria-hidden="true"><span data-loop-progress></span></div>
+  <div class="board-heading">
+    <strong>Team board</strong>
+  </div>
+
+  <div class="board-scroll" role="region" aria-label="Example project board, scroll horizontally to see all columns" tabindex="0" data-board-scroll>
+    <div class="board-columns">
+      {columns.map((column) => <div class="board-column" data-column={column.id} role="group" aria-label={`${column.title} column`}>
+        <p class="column-heading"><span>{column.title}</span><span class="column-count" data-count>{tickets.filter((ticket) => ticket.column === column.id).length}</span></p>
+        <div class="tickets" data-tickets>
+          {tickets.filter((ticket) => ticket.column === column.id).map((ticket) => <div
+            class:list={['ticket', { 'demo-ticket': ticket.demo }]}
+            data-demo-task={ticket.demo || undefined}
+            data-assignee-kind={ticket.demo ? 'agent' : 'human'}>
+            <strong class="ticket-title">{ticket.title}</strong>
+            <div class="ticket-assignee">
+              <span class="avatar" aria-hidden="true">
+                <svg class="human-avatar" viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="8" r="3.5" /><path d="M5 21v-2a7 7 0 0 1 14 0v2" /></svg>
+                <svg class="agent-avatar" viewBox="0 0 24 24" focusable="false"><path d="M12 3v3M3 11v6m18-6v6" /><rect x="5" y="6" width="14" height="15" rx="3" /><circle cx="9" cy="12" r="1" /><circle cx="15" cy="12" r="1" /><path d="M9 17h6" /></svg>
+              </span>
+              <span data-assignee>{ticket.assignee}</span>
+            </div>
+          </div>)}
+        </div>
+      </div>)}
+    </div>
+  </div>
+
+  <figcaption class="sr-only" id="agent-kanban-caption">Agents in the loop: some tasks for agents, some for humans.</figcaption>
+</figure>
+
+<style>
+  .agent-kanban {
+    margin: var(--space-4) 0;
+    margin-bottom: clamp(8rem, 15vw, 10rem);
+    border: 3px solid var(--color-ink);
+    border-radius: .75rem;
+    background: var(--color-surface);
+    box-shadow: 4px 4px 0 var(--color-ink);
+    overflow: hidden;
+    font-size: .875rem;
+    line-height: 1.45;
+  }
+
+  .board-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: .75rem;
+    padding: 1rem;
+    border-bottom: 2px solid var(--color-ink);
+  }
+
+  .board-heading > strong { font-size: 1rem; }
+  .board-progress { height: 3px; background: var(--color-paper); }
+  .board-progress span { display: block; height: 100%; background: var(--color-teal); transform: scaleX(0); transform-origin: left; }
+
+  .board-scroll { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; }
+  .board-scroll:focus-visible { outline-offset: -4px; }
+
+  .board-columns {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(9.5rem, 1fr));
+    gap: .65rem;
+    padding: .8rem;
+    min-width: 41rem;
+  }
+
+  .board-column { min-width: 0; border-radius: .4rem; background: var(--color-paper); }
+  .board-column[data-active] { background: color-mix(in srgb, var(--color-teal) 16%, white); }
+
+  .column-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: .5rem;
+    min-height: 3.6rem;
+    margin: 0;
+    padding: .75rem .6rem .3rem;
+    font-weight: 750;
+  }
+
+  .column-count { color: var(--color-muted); font-weight: 500; }
+  .tickets { display: flex; flex-direction: column; gap: .6rem; min-height: 15.5rem; padding: .6rem; }
+
+  .ticket {
+    padding: .65rem;
+    border: 1.5px solid color-mix(in srgb, var(--color-ink) 50%, white);
+    border-radius: .35rem;
+    background: white;
+    box-shadow: 2px 2px 0 color-mix(in srgb, var(--color-ink) 20%, transparent);
+  }
+
+  .demo-ticket { border: 2px solid var(--color-ink); box-shadow: 3px 3px 0 var(--color-teal); }
+  .ticket-title { display: block; font-size: .875rem; font-weight: 700; }
+  .ticket-assignee { display: flex; align-items: center; gap: .45rem; margin-top: .75rem; color: var(--color-muted); }
+  .avatar { display: inline-flex; flex: 0 0 1.65rem; width: 1.65rem; height: 1.65rem; padding: .2rem; border-radius: 50%; background: var(--color-paper); color: var(--color-ink); }
+  [data-assignee-kind='agent'] .avatar { background: var(--color-yellow); }
+  [data-agent-role='review'] .avatar { background: var(--color-pink); }
+  .avatar svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  [data-assignee-kind='agent'] .human-avatar, [data-assignee-kind='human'] .agent-avatar { display: none; }
+
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-agent-kanban]').forEach((board) => {
+    const card = board.querySelector<HTMLElement>('[data-demo-task]');
+    const progress = board.querySelector<HTMLElement>('[data-loop-progress]');
+    const scroller = board.querySelector<HTMLElement>('[data-board-scroll]');
+    const assignee = card?.querySelector<HTMLElement>('[data-assignee]');
+    const avatar = card?.querySelector<HTMLElement>('.avatar');
+    if (!card || !progress || !scroller || !assignee || !avatar) return;
+
+    const states = [
+      { column: 'todo', assignee: 'Coding agent', kind: 'agent', role: 'coding', duration: 1600 },
+      { column: 'coding', assignee: 'Coding agent', kind: 'agent', role: 'coding', duration: 2400 },
+      { column: 'review', assignee: 'Review agent', kind: 'agent', role: 'review', duration: 2200 },
+      { column: 'done', assignee: 'You', kind: 'human', role: '', duration: 2400 },
+    ];
+    const loopDuration = states.reduce((total, state) => total + state.duration, 0);
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let step = 0;
+    let elapsed = 0;
+    let lastFrame: number | undefined;
+    let frame: number | undefined;
+    let visible = false;
+    let movement: Animation | undefined;
+    let ping: Animation | undefined;
+
+    const render = (animate = true) => {
+      const state = states[step]!;
+      const column = board.querySelector<HTMLElement>(`[data-column="${state.column}"]`);
+      const list = column?.querySelector<HTMLElement>('[data-tickets]');
+      if (!column || !list) return;
+      movement?.cancel();
+      const before = card.getBoundingClientRect();
+      const assigneeChanged = assignee.textContent !== state.assignee;
+      list.append(card);
+      card.dataset.assigneeKind = state.kind;
+      card.dataset.agentRole = state.role;
+      assignee.textContent = state.assignee;
+      board.dataset.step = String(step);
+      board.querySelectorAll<HTMLElement>('[data-column]').forEach((item) => {
+        item.toggleAttribute('data-active', step > 0 && item === column);
+        const count = item.querySelector('[data-count]');
+        if (count) count.textContent = String(item.querySelector('[data-tickets]')?.children.length ?? 0);
+      });
+
+      if (animate && !reducedMotion.matches) {
+        const after = card.getBoundingClientRect();
+        const horizontal = scroller.scrollWidth > scroller.clientWidth;
+        movement = card.animate(horizontal
+          ? [{ opacity: .4, transform: 'translateY(-8px)' }, { opacity: 1, transform: 'none' }]
+          : [{ transform: `translate(${before.left - after.left}px, ${before.top - after.top}px)` }, { transform: 'none' }],
+        { duration: 420, easing: 'cubic-bezier(.2,.7,.2,1)' });
+        if (assigneeChanged) {
+          ping?.cancel();
+          ping = avatar.animate([
+            { transform: 'scale(1)', boxShadow: '0 0 0 0 rgb(20 21 26 / .35)' },
+            { transform: 'scale(1.15)', boxShadow: '0 0 0 4px rgb(20 21 26 / .2)', offset: .3 },
+            { transform: 'scale(1)', boxShadow: '0 0 0 12px rgb(20 21 26 / 0)' },
+          ], { duration: 700, easing: 'ease-out' });
+        }
+      }
+      if (scroller.scrollWidth > scroller.clientWidth) {
+        scroller.scrollTo({ left: column.offsetLeft - scroller.offsetLeft - (scroller.clientWidth - column.offsetWidth) / 2, behavior: reducedMotion.matches ? 'instant' : 'smooth' });
+      }
+    };
+
+    const tick = (timestamp: number) => {
+      if (lastFrame !== undefined) elapsed = (elapsed + timestamp - lastFrame) % loopDuration;
+      lastFrame = timestamp;
+      progress.style.transform = `scaleX(${elapsed / loopDuration})`;
+      let boundary = 0;
+      const nextStep = states.findIndex((state) => {
+        boundary += state.duration;
+        return elapsed < boundary;
+      });
+      if (nextStep !== step) { step = nextStep; render(); }
+      frame = window.requestAnimationFrame(tick);
+    };
+
+    const updatePlayback = () => {
+      if (visible && !document.hidden && !reducedMotion.matches) {
+        if (frame === undefined) frame = window.requestAnimationFrame(tick);
+      } else {
+        if (frame !== undefined) window.cancelAnimationFrame(frame);
+        frame = undefined;
+        lastFrame = undefined;
+        movement?.finish();
+        ping?.finish();
+      }
+    };
+    document.addEventListener('visibilitychange', updatePlayback);
+    reducedMotion.addEventListener('change', updatePlayback);
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry?.isIntersecting ?? false;
+      updatePlayback();
+    });
+    observer.observe(board);
+    render(false);
+  });
+</script>
