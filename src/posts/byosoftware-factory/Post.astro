@@ -66,8 +66,8 @@ import metadata from './metadata';
   <figure class="screenshot-figure">
     <a class="screenshot-image" href={slate.src} aria-label="View the full-size Slate screenshot">
       <Image src={slate}
-        widths={[480, 736, 1472]}
-        sizes="(min-width: 55rem) 46rem, 90vw"
+        widths={[480, 896, 1792]}
+        sizes="(min-width: 60.4rem) 50.4rem, 84vw"
         alt="Slate's kanban board, with Flintstones character avatars assigned to tasks across Backlog, Todo, In Progress, Review and Done."
         loading="lazy" />
     </a>
@@ -87,8 +87,8 @@ import metadata from './metadata';
   <figure class="kanban-meme">
     <div class="meme-image">
       <Image src={kanbanMeme}
-        widths={[480, 736, 1424]}
-        sizes="(min-width: 55rem) 46rem, 90vw"
+        widths={[480, 896, 1424]}
+        sizes="(min-width: 36rem) 30.24rem, 84vw"
         alt="Car salesman gestures at a kanban board over the car window. Caption: car salesman: *slaps roof of kanban* this bad boy can fit so many agents in it"
         loading="lazy" />
     </div>
@@ -125,8 +125,8 @@ import metadata from './metadata';
   <figure class="screenshot-figure codemill-figure">
     <a class="screenshot-image" href={codemill.src} aria-label="View the full-size Codemill screenshot">
       <Image src={codemill}
-        widths={[480, 736, 1472]}
-        sizes="(min-width: 55rem) 46rem, 90vw"
+        widths={[480, 896, 1792]}
+        sizes="(min-width: 60.4rem) 50.4rem, 84vw"
         alt="Codemill's dashboard showing planning, coding and review agents, their activity, tasks in flight and a factory console."
         loading="lazy" />
     </a>
@@ -150,6 +150,11 @@ import metadata from './metadata';
 
 <style>
   .screenshot-figure, .kanban-meme { margin: var(--space-4) 0; }
+
+  .kanban-meme {
+    width: min(100%, calc(var(--width-site) * .6));
+    margin-inline: auto;
+  }
 
   .screenshot-image, .meme-image {
     display: block;

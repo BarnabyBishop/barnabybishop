@@ -20,38 +20,41 @@
     --color-focus: var(--color-blue);
     --color-shadow: var(--color-ink);
 
+    /* Scale the presentation together while keeping article text readable. */
+    --site-scale: .792;
+
     /* Typography */
     --font-body: 'Schibsted Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
     --font-display: var(--font-body);
     --font-mono: ui-monospace, 'Cascadia Code', monospace;
     --text-small: .875rem;
     --text-body: clamp(1rem, .95rem + .25 * var(--fluid-unit), 1.125rem);
-    --text-heading: clamp(2.75rem, 1.75rem + 4 * var(--fluid-unit), 5.5rem);
-    --text-section: clamp(1.75rem, 1.4rem + 1.5 * var(--fluid-unit), 2.25rem);
+    --text-heading: calc(var(--site-scale) * clamp(2.75rem, 1.75rem + 4 * var(--fluid-unit), 5.5rem));
+    --text-section: calc(var(--site-scale) * clamp(1.75rem, 1.4rem + 1.5 * var(--fluid-unit), 2.25rem));
 
     /* Spacing and widths */
-    --space-1: .5rem;
-    --space-2: 1rem;
-    --space-3: clamp(1.25rem, 1rem + var(--fluid-unit), 2rem);
-    --space-4: clamp(2rem, 1.5rem + 2 * var(--fluid-unit), 3.5rem);
-    --space-5: clamp(3rem, 2rem + 4 * var(--fluid-unit), 6rem);
-    --width-site: 67rem;
-    --width-page: calc(var(--width-site) + 8rem);
-    --width-reading: 46rem;
-    /* One percent of the viewport, capped at the page's maximum width. */
-    --fluid-unit: calc(min(100vw, var(--width-page)) / 100);
-    --gutter: clamp(1.25rem, 5 * var(--fluid-unit), 4rem);
+    --space-1: calc(.5rem * var(--site-scale));
+    --space-2: calc(1rem * var(--site-scale));
+    --space-3: calc(var(--site-scale) * clamp(1.25rem, 1rem + var(--fluid-unit), 2rem));
+    --space-4: calc(var(--site-scale) * clamp(2rem, 1.5rem + 2 * var(--fluid-unit), 3.5rem));
+    --space-5: calc(var(--site-scale) * clamp(3rem, 2rem + 4 * var(--fluid-unit), 6rem));
+    --width-site: 50.4rem;
+    --width-design: 75rem;
+    --width-page: calc(var(--width-site) + 2 * var(--gutter));
+    /* Use the unscaled canvas so dimensions receive the scale exactly once. */
+    --fluid-unit: calc(min(100vw, var(--width-design)) / 100);
+    --gutter: clamp(1.5rem, 8 * var(--fluid-unit), 5rem);
     --width-content: min(calc(100% - 2 * var(--gutter)), var(--width-site));
 
     /* Borders and shadows */
-    --border-width: 3px;
+    --border-width: calc(3px * var(--site-scale));
     --border-strong: var(--border-width) solid var(--color-ink);
-    --radius-card: .75rem;
+    --radius-card: calc(.75rem * var(--site-scale));
     --radius-pill: 999px;
     --radius-round: 50%;
-    --shadow-offset: 6px;
+    --shadow-offset: calc(6px * var(--site-scale));
     --shadow-hard: var(--shadow-offset) var(--shadow-offset) 0 var(--color-shadow);
-    --shadow-small: 3px 3px 0 var(--color-shadow);
+    --shadow-small: calc(3px * var(--site-scale)) calc(3px * var(--site-scale)) 0 var(--color-shadow);
 
     /* Motion */
     --motion-duration: 140ms;
@@ -163,11 +166,10 @@
 
 @layer layout {
   .reading {
-    --text-heading: clamp(2.5rem, 1.7rem + 3 * var(--fluid-unit), 4rem);
-    --text-section: clamp(1.6rem, 1.3rem + var(--fluid-unit), 2.1rem);
-    width: min(100%, calc(var(--width-reading) + 2 * var(--gutter)));
+    --text-heading: calc(var(--site-scale) * clamp(2.5rem, 1.7rem + 3 * var(--fluid-unit), 4rem));
+    --text-section: calc(var(--site-scale) * clamp(1.6rem, 1.3rem + var(--fluid-unit), 2.1rem));
+    width: var(--width-content);
     margin: var(--space-4) auto 0;
-    padding-inline: var(--gutter);
     min-width: 0;
   }
 

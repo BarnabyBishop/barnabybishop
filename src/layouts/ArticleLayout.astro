@@ -29,7 +29,9 @@ const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone: 'UT
       <div class="prose"><slot /></div>
     </article>
   </main>
-  <SiteFooter />
+  {Astro.slots.has('footnotes')
+    ? <SiteFooter><slot name="footnotes" slot="footnotes" /></SiteFooter>
+    : <SiteFooter />}
 </SiteShell>
 
 <style>
@@ -66,7 +68,11 @@ const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone: 'UT
     .seamless-heading {
       border-bottom: 0;
       padding-bottom: 0;
-      margin-bottom: var(--space-1);
+      margin-bottom: 0;
+    }
+
+    .seamless-heading + .prose > :global(p:first-child) {
+      margin-top: var(--space-2);
     }
 
     .article-heading h1 {

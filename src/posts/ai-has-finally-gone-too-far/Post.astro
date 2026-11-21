@@ -1,0 +1,186 @@
+---
+import { Image } from 'astro:assets';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import simpsons from './assets/simpsons-rollercoaster.jpg';
+import previousWebsite from './assets/previous-website.png';
+import currentWebsite from './assets/current-website.png';
+import vocaberWords from './assets/vocaber-words.png';
+import vocaberReview from './assets/vocaber-review.png';
+import impeccableExample from './assets/impeccable-2026.png';
+import metadata from './metadata';
+---
+<ArticleLayout metadata={metadata} showDescription={false}>
+  <p>As someone working in a field being heavily disrupted by AI —<sup><a id="em-dash-ref" href="#em-dash-note"
+      aria-label="Footnote 1">1</a></sup> software development — I’m constantly torn about the subject.</p>
+
+  <p>On one hand, it’s been a huge enabler. I’m able to be much more ambitious with
+    projects and ship them faster. I’ve been able to build, and build well, personal
+    projects I’d always wanted to start but never had the time for.</p>
+
+  <p>But on the other hand, it’s brought a lot of uncertainty to software and many other professions. 
+    Not to mention the moral grey area of how these models were trained (Grand Theft Autocomplete..), 
+    the immense resources they take to run, the impact of companies trying to jam AI data centres into every community 
+    and the daunting economic "is-it is-it-not a bubble" in play.</p>
+
+  <p>A daily rollercoaster of emotions is what it is.</p>
+
+  <figure class="post-image">
+    <Image src={simpsons}
+      widths={[480, 896, 1792, 2000]}
+      sizes="(min-width: 60.4rem) 50.4rem, 84vw"
+      alt="Homer Simpson cycling through three emotions, captioned: The terrifying lows, the dizzying highs, the creamy middles."
+      loading="lazy" />
+  </figure>
+
+  <p>But it’s official: AI has finally gone too far and must be stopped.</p>
+
+  <p>It has ruined neo-brutalism.</p>
+
+  <p><a href="https://www.nngroup.com/articles/neobrutalism/">Neo-brutalism</a>{' '}
+    is a design style I’ve been a big fan for years, especially the softer versions with charcoal
+    and pastels.</p>
+
+  <p>The previous version of this website, built in 2021, used this style.</p>
+
+  <figure class="post-image screenshot-figure">
+    <a class="screenshot-link" href={previousWebsite.src} aria-label="View the full-size previous website screenshot">
+      <Image src={previousWebsite}
+        format="png"
+        widths={[480, 672, 1008, 1344]}
+        sizes="(min-width: 60.4rem) 42rem, 71vw"
+        alt="The top half of the previous Barnaby Bishop website, with a portrait beside the heading and mint and blue content panels with hard charcoal shadows."
+        loading="lazy" />
+    </a>
+  </figure>
+
+  <p>When building an app to help me learn Korean, I used it again…</p>
+
+  <figure class="post-image screenshot-figure screenshot-pair" aria-label="Vocaber app screenshots">
+    <a class="screenshot-link" href={vocaberWords.src} aria-label="View the full-size Vocaber word list screenshot">
+      <Image src={vocaberWords}
+        widths={[240, 360, 720, 1170]}
+        sizes="(min-width: 60.4rem) 20rem, 34vw"
+        alt="Vocaber’s Korean vocabulary list, with English translations, pastel proficiency badges and a rounded bottom navigation bar."
+        loading="lazy" />
+    </a>
+    <a class="screenshot-link" href={vocaberReview.src} aria-label="View the full-size Vocaber flashcard screenshot">
+      <Image src={vocaberReview}
+        widths={[240, 360, 720, 1170]}
+        sizes="(min-width: 60.4rem) 20rem, 34vw"
+        alt="Vocaber’s review screen showing a flashcard for 닮다, meaning to resemble or be alike, with an example sentence and a solid charcoal shadow."
+        loading="lazy" />
+    </a>
+  </figure>
+
+  <p>My Korean still sucks, but the app is very visually pleasing to use.</p>
+
+  <p>When redesigning this website I wanted to combine the '80s-90s Memphis design style shapes and colours
+    with a bit of neo-brutalism. They’re a match made in heaven!</p>
+
+  <figure class="post-image screenshot-figure">
+    <a class="screenshot-link" href={currentWebsite.src} aria-label="View the full-size website screenshot at launch">
+      <Image src={currentWebsite}
+        format="png"
+        widths={[480, 672, 1008, 1344]}
+        sizes="(min-width: 60.4rem) 42rem, 71vw"
+        alt="The redesigned Barnaby Bishop homepage, with a teal nameplate, colourful Memphis shapes and both launch posts dated 21 and 19 November 2026."
+        loading="lazy" />
+    </a>
+    <figcaption>The site design at launch. It has probably changed by now.</figcaption>
+  </figure>
+
+  <p>So you can imagine my dismay when, on the eve of pushing this redesign live,
+    fellow Thinkmiller <a href="https://dineshpandiyan.com/">Dinesh</a> shared{' '}
+    <a href="https://impeccable.style/">Impeccable</a> with me: a set of skills to help agents with design.</p>
+
+  <p>There, among its <a href="https://impeccable.style/slop/">examples of 2026 AI
+    design slop</a>, was neo-brutalism.</p>
+
+  <p>Cry.</p>
+
+  <figure class="post-image screenshot-figure">
+    <a class="screenshot-link" href={impeccableExample.src} aria-label="View the full-size Impeccable 2026 example screenshot">
+      <Image src={impeccableExample}
+        format="png"
+        widths={[480, 672, 1008, 1344]}
+        sizes="(min-width: 60.4rem) 42rem, 71vw"
+        alt="Impeccable’s Slop heading above its selected 2026 example: a yellow neo-brutalist website annotated for hard offset shadows and nested cards."
+        loading="lazy" />
+    </a>
+    <figcaption><a href="https://impeccable.style/slop/">Impeccable’s 2026 AI design slop example.</a></figcaption>
+  </figure>
+
+  <p>Too far AI, too far.</p>
+
+  <section slot="footnotes" class="footnotes" aria-label="Footnotes">
+    <ol>
+      <li id="em-dash-note">
+        <p>Enjoy this artisanally hand-typed em dash. I had to look up how to do it (option + shift + "-" on mac ).{' '}
+          <a href="#em-dash-ref" aria-label="Back to footnote 1 reference">↩</a></p>
+      </li>
+    </ol>
+  </section>
+</ArticleLayout>
+
+<style>
+  .post-image {
+    margin: var(--space-4) 0;
+  }
+
+  .screenshot-figure {
+    margin-inline: 8%;
+  }
+
+  .post-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-card);
+  }
+
+  .screenshot-link {
+    display: block;
+    overflow: hidden;
+    min-width: 0;
+    border: 3px solid var(--color-ink);
+    border-radius: var(--radius-card);
+    background: var(--color-surface);
+    box-shadow: 4px 4px 0 var(--color-ink);
+    cursor: zoom-in;
+  }
+
+  .screenshot-link img { border-radius: 0; }
+
+  .screenshot-pair {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: clamp(.75rem, 3vw, 1.5rem);
+  }
+
+  figcaption {
+    margin-top: var(--space-2);
+    color: var(--color-muted);
+    font-size: var(--text-small);
+    font-style: italic;
+  }
+
+  sup {
+    font-size: .7em;
+    line-height: 0;
+  }
+
+  sup a { padding-inline: .15em; }
+
+  .footnotes {
+    line-height: 1.65;
+  }
+
+  .footnotes ol {
+    margin: 0;
+    padding-inline-start: 1.5em;
+  }
+
+  .footnotes p { margin: 0; }
+  .footnotes li { scroll-margin-top: var(--space-4); }
+</style>

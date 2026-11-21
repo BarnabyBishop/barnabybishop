@@ -11,7 +11,7 @@ const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeZone: '
   <main id="content" class="home">
     <section class="hero" aria-labelledby="name">
       <Decorations area="hero" />
-      <h1 id="name"><span class="highlight">Barnaby</span> <span>Bishop</span></h1>
+      <h1 id="name"><button class="name-play" type="button" title="Play with the name and shapes"><span class="highlight cluster-piece">Barnaby</span> <span class="surname cluster-piece">Bishop</span></button></h1>
     </section>
     <section class="writing" aria-labelledby="writing">
       <Decorations area="writing" />
@@ -30,7 +30,7 @@ const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeZone: '
   /* Page sizing shared with the decorative shapes. */
   .home {
     /* --n is one "design pixel": 1px when the name is at its full 10rem. */
-    --name-size: clamp(3.5rem, 1.75rem + 8 * var(--fluid-unit), 10rem);
+    --name-size: calc(var(--site-scale) * clamp(3.5rem, 1.75rem + 8 * var(--fluid-unit), 10rem));
     --n: calc(var(--name-size) / 160);
     --name-top: calc(120 * var(--n));
     --inset: max(var(--gutter), (100% - var(--width-site)) / 2);
@@ -54,12 +54,36 @@ const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeZone: '
     font-size: var(--name-size);
     line-height: .92;
     letter-spacing: -.05em;
+    pointer-events: none;
   }
 
   h1 span {
     display: block;
     width: max-content;
+    max-width: none;
+  }
+
+  .name-play {
+    display: block;
+    width: max-content;
     max-width: 100%;
+    overflow: visible;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    text-align: start;
+    white-space: nowrap;
+    cursor: pointer;
+    pointer-events: auto;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .name-play:focus-visible {
+    outline-offset: .15em;
   }
 
   .highlight {
@@ -68,8 +92,17 @@ const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeZone: '
     background: var(--color-teal);
     border: var(--border-strong);
     border-radius: var(--radius-card);
-    box-shadow: 8px 8px 0 var(--color-shadow);
+    box-shadow: calc(8px * var(--site-scale)) calc(8px * var(--site-scale)) 0 var(--color-shadow);
     rotate: -2deg;
+    --spread-x: calc(-10 * var(--n));
+    --spread-y: calc(-14 * var(--n));
+    --spread-duration: 550ms;
+  }
+
+  .surname {
+    --spread-x: calc(22 * var(--n));
+    --spread-y: calc(14 * var(--n));
+    --spread-duration: 700ms;
   }
 
   /* Writing list and cards */
@@ -89,8 +122,7 @@ const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeZone: '
     margin: 0;
     padding: 0;
     display: grid;
-    gap: 1.25rem;
-    max-width: 56rem;
+    gap: calc(1.25rem * var(--site-scale));
   }
 
   .card {
@@ -103,10 +135,10 @@ const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeZone: '
 
   li {
     display: grid;
-    grid-template-columns: 8.5rem minmax(0, 1fr) auto;
+    grid-template-columns: calc(8.5rem * var(--site-scale)) minmax(0, 1fr) auto;
     align-items: center;
     gap: var(--space-3);
-    padding: 1.25rem 1.75rem;
+    padding: calc(1.25rem * var(--site-scale)) calc(1.75rem * var(--site-scale));
   }
 
   time {
@@ -115,7 +147,7 @@ const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeZone: '
 
   h3 {
     margin: 0;
-    font-size: clamp(1.25rem, 1rem + var(--fluid-unit), 1.65rem);
+    font-size: calc(var(--site-scale) * clamp(1.25rem, 1rem + var(--fluid-unit), 1.65rem));
     letter-spacing: -.02em;
   }
 
@@ -132,7 +164,7 @@ const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeZone: '
   }
 
   .arrow {
-    font-size: 1.5rem;
+    font-size: calc(1.5rem * var(--site-scale));
     font-weight: 700;
   }
 
@@ -160,14 +192,44 @@ const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeZone: '
   .empty {
     position: relative;
     margin: 0;
-    padding: 1.25rem 1.75rem;
-    max-width: 56rem;
+    padding: calc(1.25rem * var(--site-scale)) calc(1.75rem * var(--site-scale));
   }
 
   @media (prefers-reduced-motion: no-preference) {
+    .hero :global(.cluster-piece) {
+      transform: translate(calc(var(--spread-x) * var(--cluster-spread, 0)), calc(var(--spread-y) * var(--cluster-spread, 0)));
+      transition: transform var(--spread-duration) cubic-bezier(.2, .8, .2, 1);
+    }
+
+    .hero:has(.name-play:focus-visible, :global(.cluster-shape:focus-visible)) {
+      --cluster-spread: 1;
+    }
+
+    @media (hover: hover) {
+      .hero:has(.name-play:hover, :global(.cluster-shape:hover)) {
+        --cluster-spread: 1;
+      }
+    }
+
+    @media (hover: none) {
+      .hero:has(.name-play:is(:hover, :focus), :global(.cluster-shape:is(:hover, :focus))) :global(.cluster-piece) {
+        animation: cluster-tap calc(2 * var(--spread-duration)) cubic-bezier(.2, .8, .2, 1);
+      }
+
+      /* Releasing each tap starts a fresh cycle, including on sticky hover. */
+      .hero:has(.name-play:active, :global(.cluster-shape:active)) :global(.cluster-piece) {
+        animation: none;
+      }
+    }
+
     li {
       transition: translate var(--motion-duration) var(--motion-easing), box-shadow var(--motion-duration) var(--motion-easing);
     }
+  }
+
+  @keyframes cluster-tap {
+    0%, 100% { transform: translate(0, 0); }
+    30%, 50% { transform: translate(var(--spread-x), var(--spread-y)); }
   }
 
   @media (max-width: 40rem) {
@@ -177,8 +239,8 @@ const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeZone: '
 
     li {
       grid-template-columns: minmax(0, 1fr);
-      gap: .25rem;
-      padding: 1rem 1.25rem;
+      gap: calc(.25rem * var(--site-scale));
+      padding: calc(1rem * var(--site-scale)) calc(1.25rem * var(--site-scale));
     }
 
     .arrow {
